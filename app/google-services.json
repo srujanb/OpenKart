@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "708002449471",
+    "firebase_url": "https://openkart-e703d.firebaseio.com",
+    "project_id": "openkart-e703d",
+    "storage_bucket": "openkart-e703d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:708002449471:android:f905a91e5b75ece5",
+        "android_client_info": {
+          "package_name": "com.example.sbarai.openkart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "708002449471-a95boa4emp9a8h0rof0bngth2iuhslsq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sbarai.openkart",
+            "certificate_hash": "11003b4167411a8042d4efa9db1f39a38aa37d50"
+          }
+        },
+        {
+          "client_id": "708002449471-e72ue1chuomg3trj4adhd2bl382nog84.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsFo83_tBvLylL9iflT_FxI_jNLobx0Uo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "708002449471-e72ue1chuomg3trj4adhd2bl382nog84.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
