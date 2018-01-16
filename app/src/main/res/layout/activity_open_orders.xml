@@ -7,6 +7,9 @@
     android:layout_height="match_parent"
     tools:context="com.example.sbarai.openkart.OpenOrders">
 
+    <include
+        android:id="@+id/appbar"
+        layout="@layout/appbar_openorders" />
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/menu"
