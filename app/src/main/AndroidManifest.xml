@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name=".OpenOrders"></activity>
+        <activity android:name=".OpenOrders" />
+        <activity android:name=".CreateProspectOrder"></activity>
     </application>
 
 </manifest>
