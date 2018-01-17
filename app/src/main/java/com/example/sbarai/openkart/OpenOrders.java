@@ -21,7 +21,6 @@ public class OpenOrders extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_orders);
 
-        FirebaseApp.initializeApp(this);
         toolbar = findViewById(R.id.appbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
