@@ -6,11 +6,11 @@ package com.example.sbarai.openkart.Models;
 
 public class CollaborationItem {
 
-    public final int UNITTYPE_COUNT = 0;
-    public final int UNITTYPE_GRAM = 1;
-    public final int UNITTYPE_KILOGRAM = 2;
-    public final int UNITTYPE_MILLILITER = 3;
-    public final int UNITTYPE_LITRE = 4;
+    private String itemName;
+    private float count;
+    private float ratePerUnit;
+    private int unitType;
+    private Boolean isDelivered;
 
     public String getItemName() {
         return itemName;
@@ -44,10 +44,13 @@ public class CollaborationItem {
         this.unitType = unitType;
     }
 
-    String itemName;
-    float count;
-    float ratePerUnit;
-    int unitType;
+    public Boolean isDelivered() {
+        return isDelivered;
+    }
+
+    public void setIsDelivered(Boolean delivered) {
+        isDelivered = delivered;
+    }
 
     public String getUnitTypeSymbol(int unitType){
         String unitTypeUnitSymbole = getUnitTypeUnitSymbol(unitType);
@@ -59,19 +62,19 @@ public class CollaborationItem {
 
     public String getUnitTypeUnitSymbol(int unitType){
         switch (unitType){
-            case UNITTYPE_COUNT:{
+            case Constants.CollaborationItem.UNITTYPE_COUNT:{
                 return "packet";
             }
-            case UNITTYPE_GRAM:{
+            case Constants.CollaborationItem.UNITTYPE_GRAM:{
                 return "gram";
             }
-            case UNITTYPE_KILOGRAM:{
+            case Constants.CollaborationItem.UNITTYPE_KILOGRAM:{
                 return "kilogram";
             }
-            case UNITTYPE_MILLILITER:{
+            case Constants.CollaborationItem.UNITTYPE_MILLILITER:{
                 return "milliliter";
             }
-            case UNITTYPE_LITRE:{
+            case Constants.CollaborationItem.UNITTYPE_LITRE:{
                 return "litre";
             }
             default:
