@@ -11,6 +11,7 @@ public class LoginActivity extends AppCompatActivity {
 
     Button submit;
     TextView forgot_password;
+    TextView sign_up;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,5 +32,14 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        sign_up = (TextView) findViewById(R.id.signup);
+        sign_up.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, SignUp.class);
+                startActivity(intent);
+            }
+        });
     }
+
 }
