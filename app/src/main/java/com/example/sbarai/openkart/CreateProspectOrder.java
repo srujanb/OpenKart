@@ -66,7 +66,10 @@ public class CreateProspectOrder extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        checkGPS();
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            checkGPS();
+        }
     }
 
     @Override
@@ -74,9 +77,6 @@ public class CreateProspectOrder extends AppCompatActivity
         Toast.makeText(this, "Map is ready", Toast.LENGTH_SHORT).show();
         mMap = googleMap;
 
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
