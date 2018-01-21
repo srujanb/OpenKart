@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+
 public class LoginActivity extends AppCompatActivity {
 
     Button submit;
@@ -24,6 +27,9 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        YoYo.with(Techniques.Wobble).duration(200).repeat(1).playOn(findViewById(R.id.submit));
+
         forgot_password = (TextView) findViewById(R.id.forgot_password);
         forgot_password.setOnClickListener(new View.OnClickListener() {
             @Override
