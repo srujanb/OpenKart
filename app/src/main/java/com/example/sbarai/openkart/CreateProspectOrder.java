@@ -1,6 +1,7 @@
 package com.example.sbarai.openkart;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,6 +18,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.DatePicker;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -32,11 +37,17 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 public class CreateProspectOrder extends AppCompatActivity
     implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener{
+
+
 
     Toolbar toolbar;
     GoogleMap mMap;
@@ -44,12 +55,45 @@ public class CreateProspectOrder extends AppCompatActivity
     Activity thisActivity;
     private LocationRequest mLocationRequest;
     private Marker mCurrLocationMarker;
+    TextView orderDate;
+    int mYear, mDate, mMonth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_prospect_order);
         thisActivity = this;
+
+
+        orderDate = (TextView) findViewById(R.id.order_date);
+        orderDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar mcurrentDate = Calendar.getInstance();
+                mYear = mcurrentDate.get(Calendar.YEAR);
+                mMonth = mcurrentDate.get(Calendar.MONTH);
+                mDate = mcurrentDate.get(Calendar.DATE);
+
+                DatePickerDialog mDatePicker = new DatePickerDialog(CreateProspectOrder.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int selectedYear, int selectedMonth, int selectedDay) {
+                        Calendar myCalendar = Calendar.getInstance();
+                        myCalendar.set(Calendar.YEAR,selectedYear);
+                        myCalendar.set(Calendar.MONTH,selectedMonth);
+                        myCalendar.set(Calendar.DATE,selectedDay);
+                        String myFormat = "MM/dd/yy";
+                        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+                        orderDate.setText(sdf.format(myCalendar.getTime()));
+
+                        mDate = selectedDay;
+                        mMonth = selectedMonth;
+                        mYear = selectedYear;
+                    }
+                }, mYear, mMonth, mDate);
+                mDatePicker.show();
+
+            }
+        });
 
         toolbar = findViewById(R.id.appbar);
         setSupportActionBar(toolbar);
