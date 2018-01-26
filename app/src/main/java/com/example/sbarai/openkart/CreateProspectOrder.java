@@ -1,6 +1,7 @@
 package com.example.sbarai.openkart;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,6 +18,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.DatePicker;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -32,11 +36,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Locale;
+
 public class CreateProspectOrder extends AppCompatActivity
     implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener{
+
+
 
     Toolbar toolbar;
     GoogleMap mMap;
@@ -45,6 +56,9 @@ public class CreateProspectOrder extends AppCompatActivity
     private LocationRequest mLocationRequest;
     private Marker mCurrLocationMarker;
     Location lastLoc;
+    TextView orderDateText;
+    LocalDate orderDate;
+    int mYear, mDate, mMonth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +71,43 @@ public class CreateProspectOrder extends AppCompatActivity
         getSupportActionBar().setTitle("");
         toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
+        orderDateText = findViewById(R.id.order_date);
+        orderDateText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar mCurrentDate = Calendar.getInstance();
+                mYear = mCurrentDate.get(Calendar.YEAR);
+                mMonth = mCurrentDate.get(Calendar.MONTH);
+                mDate = mCurrentDate.get(Calendar.DATE);
+                orderDate = LocalDate.of(mYear,mMonth,mDate);
+                orderDateText.setText(orderDate.toString());
+
+                DatePickerDialog mDatePicker = new DatePickerDialog(CreateProspectOrder.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int selectedYear, int selectedMonth, int selectedDay) {
+                        Calendar myCalendar = Calendar.getInstance();
+                        myCalendar.set(Calendar.YEAR,selectedYear);
+                        myCalendar.set(Calendar.MONTH,selectedMonth);
+                        myCalendar.set(Calendar.DATE,selectedDay);
+                        String myFormat = "MM/dd/yy";
+                        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+                        orderDateText.setText(sdf.format(myCalendar.getTime()));
+
+                        mDate = selectedDay;
+                        mMonth = selectedMonth;
+                        mYear = selectedYear;
+                        orderDate = LocalDate.of(mYear,mMonth,mDate);
+                        orderDateText.setText(orderDate.toString());
+                    }
+                }, mYear, mMonth, mDate);
+                mDatePicker.show();
+
+            }
+        });
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_view);
         mapFragment.getMapAsync(this);
-
 
     }
 
