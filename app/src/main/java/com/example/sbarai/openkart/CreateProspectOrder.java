@@ -2,11 +2,13 @@ package com.example.sbarai.openkart;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
+//import android.location.LocationListener;
+import com.google.android.gms.location.LocationListener;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -54,6 +56,7 @@ public class CreateProspectOrder extends AppCompatActivity
     private GoogleApiClient mGoogleApiClient;
     Activity thisActivity;
     private LocationRequest mLocationRequest;
+    private com.google.android.gms.location.LocationListener locationListener;
     private Marker mCurrLocationMarker;
     Location lastLoc;
     TextView orderDateText;
@@ -277,52 +280,48 @@ public class CreateProspectOrder extends AppCompatActivity
     }
 
     @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String s) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
-        Toast.makeText(this, "onProviderDisabled", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
     public void onConnected(@Nullable Bundle bundle) {
         Toast.makeText(thisActivity, "onConnected", Toast.LENGTH_SHORT).show();
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(1000);
         mLocationRequest.setFastestInterval(1000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+
+        locationListener = new com.google.android.gms.location.LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                lastLoc = location;
+//                Toast.makeText(thisActivity, "onLocationChanged called", Toast.LENGTH_SHORT).show();
+                if (mCurrLocationMarker != null) {
+                    mCurrLocationMarker.remove();
+                }
+
+                //Place current location marker
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(latLng);
+                markerOptions.title("Current Position");
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+                mCurrLocationMarker = mMap.addMarker(markerOptions);
+
+                //move map camera
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,14));
+            }
+        };
         if (ContextCompat.checkSelfPermission(this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, new com.google.android.gms.location.LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    lastLoc = location;
-//                    Toast.makeText(thisActivity, "onLocationChanged called", Toast.LENGTH_SHORT).show();
-                    if (mCurrLocationMarker != null) {
-                        mCurrLocationMarker.remove();
-                    }
-
-                    //Place current location marker
-                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(latLng);
-                    markerOptions.title("Current Position");
-                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-                    mCurrLocationMarker = mMap.addMarker(markerOptions);
-
-                    //move map camera
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,14));
-                }
-            });
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest,locationListener);
         }
+    }
+
+    @Override
+    protected void onStop() {
+        if (mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, (com.google.android.gms.location.LocationListener) this);
+            mGoogleApiClient.disconnect();
+        }
+        super.onStop();
     }
 
     @Override
