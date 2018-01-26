@@ -79,7 +79,7 @@ public class CreateProspectOrder extends AppCompatActivity
                 mYear = mCurrentDate.get(Calendar.YEAR);
                 mMonth = mCurrentDate.get(Calendar.MONTH);
                 mDate = mCurrentDate.get(Calendar.DATE);
-                orderDate = LocalDate.of(mYear,mMonth,mDate);
+                orderDate = LocalDate.of(mYear,mMonth + 1,mDate);
                 orderDateText.setText(orderDate.toString());
 
                 DatePickerDialog mDatePicker = new DatePickerDialog(CreateProspectOrder.this, new DatePickerDialog.OnDateSetListener() {
@@ -96,7 +96,7 @@ public class CreateProspectOrder extends AppCompatActivity
                         mDate = selectedDay;
                         mMonth = selectedMonth;
                         mYear = selectedYear;
-                        orderDate = LocalDate.of(mYear,mMonth,mDate);
+                        orderDate = LocalDate.of(mYear,mMonth + 1,mDate);
                         orderDateText.setText(orderDate.toString());
                     }
                 }, mYear, mMonth, mDate);
@@ -305,7 +305,7 @@ public class CreateProspectOrder extends AppCompatActivity
                 @Override
                 public void onLocationChanged(Location location) {
                     lastLoc = location;
-                    Toast.makeText(thisActivity, "onLocationChanged called", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(thisActivity, "onLocationChanged called", Toast.LENGTH_SHORT).show();
                     if (mCurrLocationMarker != null) {
                         mCurrLocationMarker.remove();
                     }
