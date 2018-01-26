@@ -44,6 +44,7 @@ public class CreateProspectOrder extends AppCompatActivity
     Activity thisActivity;
     private LocationRequest mLocationRequest;
     private Marker mCurrLocationMarker;
+    Location lastLoc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +75,8 @@ public class CreateProspectOrder extends AppCompatActivity
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Toast.makeText(this, "Map is ready", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Map is ready", Toast.LENGTH_SHORT).show();
         mMap = googleMap;
-
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
@@ -147,7 +147,7 @@ public class CreateProspectOrder extends AppCompatActivity
                     if (ContextCompat.checkSelfPermission(this,
                             android.Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
-                        Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
                         if (mGoogleApiClient == null) {
                             buildGoogleApiClient();
                         }
@@ -159,7 +159,7 @@ public class CreateProspectOrder extends AppCompatActivity
 
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
                     finish();
                 }
                 return;
@@ -171,7 +171,7 @@ public class CreateProspectOrder extends AppCompatActivity
     }
 
     public void checkGPS(){
-        Toast.makeText(thisActivity, "isLocationEnabled: " + isLocationEnabled(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(thisActivity, "isLocationEnabled: " + isLocationEnabled(), Toast.LENGTH_SHORT).show();
         if (!isLocationEnabled()){
             new AlertDialog.Builder(this)
                     .setTitle("Please enable GPS")
@@ -257,7 +257,8 @@ public class CreateProspectOrder extends AppCompatActivity
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, new com.google.android.gms.location.LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
-                    Location mLastLocation = location;
+                    lastLoc = location;
+                    Toast.makeText(thisActivity, "onLocationChanged called", Toast.LENGTH_SHORT).show();
                     if (mCurrLocationMarker != null) {
                         mCurrLocationMarker.remove();
                     }
@@ -279,12 +280,12 @@ public class CreateProspectOrder extends AppCompatActivity
 
     @Override
     public void onConnectionSuspended(int i) {
-        Toast.makeText(this, "onConnectionSuspended", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "onConnectionSuspended", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Toast.makeText(this, "onConnectionFailed", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "onConnectionFailed", Toast.LENGTH_SHORT).show();
     }
 
 }

@@ -21,18 +21,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-<!--<<<<<<< HEAD-->
-        <!--<activity android:name=".SplashScreen"></activity>-->
-        <!--<activity android:name=".MainActivity" />-->
-        <!--<activity android:name=".OpenOrders" />-->
-        <!--<activity android:name=".CreateProspectOrder"-->
-            <!--android:windowSoftInputMode="stateHidden"/>-->
-        <!--<activity android:name=".Models.LoginActivity">-->
-<!--=======-->
         <activity android:name=".SplashScreen" />
         <activity android:name=".MainActivity" />
         <activity android:name=".OpenOrders" />
-        <activity android:name=".CreateProspectOrder" />
+        <activity android:name=".CreateProspectOrder"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
