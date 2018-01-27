@@ -401,7 +401,7 @@ public class CreateProspectOrder extends AppCompatActivity
     @Override
     protected void onStop() {
         if (mGoogleApiClient.isConnected()) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, (com.google.android.gms.location.LocationListener) this);
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,  this);
             mGoogleApiClient.disconnect();
         }
         super.onStop();
