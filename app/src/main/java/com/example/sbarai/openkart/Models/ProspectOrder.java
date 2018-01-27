@@ -2,7 +2,12 @@ package com.example.sbarai.openkart.Models;
 
 import android.location.Location;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.List;
+
+
+// TODO : DELETE THIS FILE
 
 /**
  * Created by sbarai on 1/18/18.
@@ -10,28 +15,45 @@ import java.util.List;
 
 public class ProspectOrder {
 
-    private String poid;
-    private long dateTime; //Will be stored as milliseconds on server therefore long.
-    private double loc_lat;
-    private double loc_lon;
+    public Object dateTime; //Will be stored as milliseconds on server therefore long.
+    private double locLat;
+    private double locLon;
     private float colabRadius;
     private String desiredStore;
-    private String orderDate; //Can be easily converted to String from java.time
+    private long orderDate; //Can be easily converted to String from java.time
     private float targetTotal;
     private List<Collaborator> collaborators;
     private List<Comment> comments;
     private int status;
 
+    @Exclude
     public void setLocation(Location location){
-        loc_lat = location.getLatitude();
-        loc_lon = location.getLongitude();
+        locLat = location.getLatitude();
+        locLon = location.getLongitude();
     }
 
+    @Exclude
     public Location getLocation(){
         Location location = new Location("");
-        location.setLatitude(loc_lat);
-        location.setLongitude(loc_lon);
+        location.setLatitude(locLat);
+        location.setLongitude(locLon);
         return location;
+    }
+
+    public double getLocLat() {
+        return locLat;
+    }
+
+    public void setLocLat(double locLat) {
+        this.locLat = locLat;
+    }
+
+    public double getLocLon() {
+        return locLon;
+    }
+
+    public void setLocLon(double locLon) {
+        this.locLon = locLon;
     }
 
     public void setColabRadius(float radius){
@@ -50,11 +72,11 @@ public class ProspectOrder {
         return desiredStore;
     }
 
-    public void setOrderDate(String date){
+    public void setOrderDate(long date){
         orderDate = date;
     }
 
-    public String getOrderDate(){
+    public long getOrderDate(){
         return orderDate;
     }
 

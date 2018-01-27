@@ -1,5 +1,7 @@
 package com.example.sbarai.openkart.Models;
 
+import com.google.firebase.database.Exclude;
+
 /**
  * Created by sbarai on 1/17/18.
  */
@@ -7,6 +9,7 @@ package com.example.sbarai.openkart.Models;
 public class CollaborationItem {
 
     private String itemName;
+    private String itemLink;
     private float count;
     private float ratePerUnit;
     private int unitType;
@@ -18,6 +21,14 @@ public class CollaborationItem {
 
     public void seItemName(String name) {
         this.itemName = name;
+    }
+
+    public String getItemLink() {
+        return itemLink;
+    }
+
+    public void setItemLink(String itemLink) {
+        this.itemLink = itemLink;
     }
 
     public float getCount() {
@@ -52,6 +63,7 @@ public class CollaborationItem {
         isDelivered = delivered;
     }
 
+    @Exclude
     public String getUnitTypeSymbol(int unitType){
         String unitTypeUnitSymbole = getUnitTypeUnitSymbol(unitType);
         if (unitTypeUnitSymbole.equals(""))
@@ -60,6 +72,7 @@ public class CollaborationItem {
             return unitTypeUnitSymbole.concat("(s)");
     }
 
+    @Exclude
     public String getUnitTypeUnitSymbol(int unitType){
         switch (unitType){
             case Constants.CollaborationItem.UNITTYPE_COUNT:{

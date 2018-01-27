@@ -2,12 +2,12 @@ package com.example.sbarai.openkart;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-//import android.location.LocationListener;
+import com.example.sbarai.openkart.Models.Constants;
+import com.example.sbarai.openkart.Models.ProspectOrder;
 import com.google.android.gms.location.LocationListener;
 import android.os.Build;
 import android.provider.Settings;
@@ -21,7 +21,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,9 +39,15 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ServerValue;
+
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -48,8 +56,6 @@ public class CreateProspectOrder extends AppCompatActivity
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener{
-
-
 
     Toolbar toolbar;
     GoogleMap mMap;
@@ -60,8 +66,13 @@ public class CreateProspectOrder extends AppCompatActivity
     private Marker mCurrLocationMarker;
     Location lastLoc;
     TextView orderDateText;
-    LocalDate orderDate;
+    long orderDate;
     int mYear, mDate, mMonth;
+
+    Button submitButton;
+    EditText desiredStore;
+    EditText colabRadius;
+    EditText targetTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +85,33 @@ public class CreateProspectOrder extends AppCompatActivity
         getSupportActionBar().setTitle("");
         toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
+        initVariables();
+        setViewActions();
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map_view);
+        mapFragment.getMapAsync(this);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            checkGPS();
+        }
+    }
+
+    public void initVariables(){
         orderDateText = findViewById(R.id.order_date);
+        submitButton = findViewById(R.id.submitButton);
+        colabRadius = findViewById(R.id.colabRadius);
+        targetTotal = findViewById(R.id.targetTotal);
+        desiredStore = findViewById(R.id.desiredStore);
+    }
+
+    private void setViewActions() {
         orderDateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,8 +119,8 @@ public class CreateProspectOrder extends AppCompatActivity
                 mYear = mCurrentDate.get(Calendar.YEAR);
                 mMonth = mCurrentDate.get(Calendar.MONTH);
                 mDate = mCurrentDate.get(Calendar.DATE);
-                orderDate = LocalDate.of(mYear,mMonth + 1,mDate);
-                orderDateText.setText(orderDate.toString());
+                orderDate = LocalDate.of(mYear,mMonth + 1,mDate).atStartOfDay().atZone(ZoneId.of("America/Los_Angeles")).toInstant().toEpochMilli();
+                orderDateText.setText(LocalDate.of(mYear,mMonth + 1,mDate).toString());
 
                 DatePickerDialog mDatePicker = new DatePickerDialog(CreateProspectOrder.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
@@ -99,8 +136,8 @@ public class CreateProspectOrder extends AppCompatActivity
                         mDate = selectedDay;
                         mMonth = selectedMonth;
                         mYear = selectedYear;
-                        orderDate = LocalDate.of(mYear,mMonth + 1,mDate);
-                        orderDateText.setText(orderDate.toString());
+                        orderDate = LocalDate.of(mYear,mMonth + 1,mDate).atStartOfDay().atZone(ZoneId.of("America/Los_Angeles")).toInstant().toEpochMilli();
+                        orderDateText.setText(LocalDate.of(mYear,mMonth + 1,mDate).toString());
                     }
                 }, mYear, mMonth, mDate);
                 mDatePicker.show();
@@ -108,19 +145,65 @@ public class CreateProspectOrder extends AppCompatActivity
             }
         });
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map_view);
-        mapFragment.getMapAsync(this);
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    submitProspectOrder();
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Toast.makeText(thisActivity, "Error: Please check the order details", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            checkGPS();
+    private void submitProspectOrder() {
+        ProspectOrder prospectOrder = new ProspectOrder();
+        prospectOrder.dateTime = ServerValue.TIMESTAMP;
+        prospectOrder.setLocation(lastLoc);
+        prospectOrder.setDesiredStore(desiredStore.getText().toString());
+        prospectOrder.setColabRadius(Float.parseFloat(colabRadius.getText().toString()));
+        prospectOrder.setTargetTotal(Float.parseFloat(targetTotal.getText().toString()));
+        prospectOrder.setOrderDate(orderDate);
+        prospectOrder.setStatus(Constants.ProspectOrder.STATUS_ACTIVE);
+        //TODO set user/collaborator
+
+        if (isProspectOrderValid(prospectOrder)){
+            DatabaseReference ref = FirebaseManager.getRefToProspectOrders();
+            ref = ref.push();
+            ref.setValue(prospectOrder).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    Toast.makeText(thisActivity, "Task completed : " + task.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
         }
+    }
+
+    private boolean isProspectOrderValid(ProspectOrder prospectOrder) {
+        if (prospectOrder.getDesiredStore() == null || prospectOrder.getDesiredStore().equals("")){
+            Toast.makeText(thisActivity, "Please enter Store name", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if (prospectOrder.getLocation() == null){
+            Toast.makeText(thisActivity, "Error fetching location. Please try again", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if (prospectOrder.getColabRadius() == 0){
+            Toast.makeText(thisActivity, "Error: Collaboration radius cannot be zero.", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if (prospectOrder.getTargetTotal() == 0){
+            Toast.makeText(thisActivity, "Error: Target total cannot be zero", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if (prospectOrder.getOrderDate() < LocalDate.now().atStartOfDay().atZone(ZoneId.of("America/Los_Angeles")).toInstant().toEpochMilli()){
+            Toast.makeText(thisActivity, "Error: Please select current or future date", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -326,12 +409,12 @@ public class CreateProspectOrder extends AppCompatActivity
 
     @Override
     public void onConnectionSuspended(int i) {
-//        Toast.makeText(this, "onConnectionSuspended", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "ERROR: Connection suspended", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-//        Toast.makeText(this, "onConnectionFailed", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "ERROR: Connection failed", Toast.LENGTH_SHORT).show();
     }
 
 }

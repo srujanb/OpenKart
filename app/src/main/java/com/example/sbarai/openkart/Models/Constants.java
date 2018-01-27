@@ -16,14 +16,20 @@ public class Constants {
 
     }
 
-    class ProspectOrder{
+    public class ProspectOrder{
 
-        private final int STATUS_ACTIVE = 0;
-        private final int STATUS_CANCELED = 1;
-        private final int STATUS_ORDERED = 2;
-        private final int STATUS_PARTIALLY_DELIVERED = 3;
-        private final int STATUS_DELIVERED = 4;
+        public static final int STATUS_ACTIVE = 0;
+        public static final int STATUS_CANCELED = 1;
+        public static final int STATUS_ORDERED = 2;
+        public static final int STATUS_PARTIALLY_DELIVERED = 3;
+        public static final int STATUS_DELIVERED = 4;
 
     }
 
+    public class FirebaseManager {
+
+        public static final String APP_DATA = "appData";
+        public static final String OPEN_ORDERS = "openOrders";
+        public static final String PROSPECT_ORDERS = "prospectOrders";
+    }
 }

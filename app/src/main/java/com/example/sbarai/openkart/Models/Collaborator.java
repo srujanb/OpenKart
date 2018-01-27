@@ -1,6 +1,5 @@
 package com.example.sbarai.openkart.Models;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -10,15 +9,15 @@ import java.util.List;
 
 public class Collaborator {
 
-    private User user;
+    private String userId;
     private List<CollaborationItem> collaborationItems;
 
-    public User getUser() {
-        return user;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public List<CollaborationItem> getCollaborationItems() {
