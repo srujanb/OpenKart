@@ -1,6 +1,5 @@
-package com.example.sbarai.openkart;
+package com.example.sbarai.openkart.Utils;
 
-import com.example.sbarai.openkart.Models.Constants;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 

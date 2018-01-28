@@ -1,4 +1,4 @@
-package com.example.sbarai.openkart.Models;
+package com.example.sbarai.openkart.Utils;
 
 /**
  * Created by sbarai on 1/19/18.
@@ -6,7 +6,7 @@ package com.example.sbarai.openkart.Models;
 
 public class Constants {
 
-    class CollaborationItem {
+    public class CollaborationItem {
 
         public static final int UNITTYPE_COUNT = 0;
         public static final int UNITTYPE_GRAM = 1;
