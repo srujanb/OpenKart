@@ -6,18 +6,18 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.example.sbarai.openkart.Adapters.RvProspectOrderAdapter;
 import com.example.sbarai.openkart.Models.ProspectOrder;
 import com.example.sbarai.openkart.Utils.FirebaseManager;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.firebase.geofire.GeoFire;
+
 import com.github.clans.fab.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Query;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OpenOrders extends AppCompatActivity {
 
@@ -26,9 +26,9 @@ public class OpenOrders extends AppCompatActivity {
     Toolbar toolbar;
 
     RecyclerView mRecyclerView;
-    FirebaseRecyclerAdapter<ProspectOrder,ProspectOrderViewHolder> mRecyclerViewAdapter;
-    FirebaseRecyclerOptions<ProspectOrder> options;
+    private RvProspectOrderAdapter adapter;
     DatabaseReference prospectOrdersReference;
+    GeoFire geoFire;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,19 +42,23 @@ public class OpenOrders extends AppCompatActivity {
         defineVariables();
         setFABListeners();
 
+        initVariables();
         setRecyclerView();
 
+    }
+
+    private void initVariables() {
+        mRecyclerView = findViewById(R.id.rv_open_orders);
+        geoFire = new GeoFire(FirebaseManager.getRefToGeofireForProspectOrders());
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        mRecyclerViewAdapter.startListening();
     }
 
     @Override
     protected void onStop() {
-        mRecyclerViewAdapter.stopListening();
         super.onStop();
     }
 
@@ -81,39 +85,33 @@ public class OpenOrders extends AppCompatActivity {
         });
     }
 
+    public List<ProspectOrder> getData(){
+        List<ProspectOrder> orders = new ArrayList<>();
+        ProspectOrder order = new ProspectOrder();
+        order.setDesiredStore("Walmart");
+        ProspectOrder order2 = new ProspectOrder();
+        order2.setDesiredStore("Cosco");
+        ProspectOrder order3 = new ProspectOrder();
+        order3.setDesiredStore("Apple bee");
+        ProspectOrder order4 = new ProspectOrder();
+        order4.setDesiredStore("NCSU store");
+        ProspectOrder order5 = new ProspectOrder();
+        order5.setDesiredStore("Walmart");
+
+        orders.add(order);
+        orders.add(order2);
+        orders.add(order3);
+        orders.add(order4);
+        orders.add(order5);
+
+        return orders;
+    }
+
     public void setRecyclerView(){
-        mRecyclerView = findViewById(R.id.rv_open_orders);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(OpenOrders.this));
-        prospectOrdersReference = FirebaseManager.getRefToProspectOrders();
-        Query query = FirebaseManager.getRefToProspectOrders();
-        options = new FirebaseRecyclerOptions.Builder<ProspectOrder>()
-                        .setQuery(query, ProspectOrder.class)
-                        .build();
-        setAdapter();
+        adapter = new RvProspectOrderAdapter(this,getData());
+        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void setAdapter() {
-        mRecyclerViewAdapter = new FirebaseRecyclerAdapter<ProspectOrder, ProspectOrderViewHolder>(options) {
-            @Override
-            protected void onBindViewHolder(ProspectOrderViewHolder holder, int position, ProspectOrder model) {
-                holder.storeName.setText(model.getDesiredStore());
-            }
 
-            @Override
-            public ProspectOrderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.row_rv_prospect_order, parent, false);
-                return new ProspectOrderViewHolder(view);
-            }
-        };
-        mRecyclerView.setAdapter(mRecyclerViewAdapter);
-    }
-
-    private static class ProspectOrderViewHolder extends RecyclerView.ViewHolder {
-        TextView storeName;
-        public ProspectOrderViewHolder(View itemView) {
-            super(itemView);
-            storeName = itemView.findViewById(R.id.storeName);
-        }
-    }
 }

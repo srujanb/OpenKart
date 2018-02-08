@@ -9,6 +9,8 @@ import android.location.Location;
 import com.example.sbarai.openkart.Utils.Constants;
 import com.example.sbarai.openkart.Models.ProspectOrder;
 import com.example.sbarai.openkart.Utils.FirebaseManager;
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.location.LocationListener;
 import android.os.Build;
 import android.provider.Settings;
@@ -51,6 +53,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.zip.Inflater;
 
 public class CreateProspectOrder extends AppCompatActivity
     implements OnMapReadyCallback,
@@ -174,6 +177,7 @@ public class CreateProspectOrder extends AppCompatActivity
         if (isProspectOrderValid(prospectOrder)){
             DatabaseReference ref = FirebaseManager.getRefToProspectOrders();
             ref = ref.push();
+            new GeoFire(FirebaseManager.getRefToGeofireForProspectOrders()).setLocation(ref.getKey(),new GeoLocation(prospectOrder.getLocLat(),prospectOrder.getLocLon()));
             ref.setValue(prospectOrder).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
