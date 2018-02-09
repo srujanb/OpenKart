@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.sbarai.openkart.Utils.PhoneAuth">
+    tools:context="com.example.sbarai.openkart.PhoneAuth">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -32,7 +32,7 @@
             android:layout_toRightOf="@+id/icon"
             />
 
-        <!--<TextView
+        <TextView
             android:id="@+id/title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
             android:layout_toStartOf="@+id/title_text"
             android:layout_marginRight="78dp"
             android:layout_marginEnd="78dp"
-            android:layout_marginTop="52dp" />-->
+            android:layout_marginTop="52dp" />
 
 
         <EditText
