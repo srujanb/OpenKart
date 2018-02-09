@@ -11,11 +11,31 @@
         android:id="@+id/appbar"
         layout="@layout/appbar_openorders" />
 
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_open_orders"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/appbar"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+
+        <EditText
+            android:id="@+id/radius"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GO"
+            android:onClick="GO"/>
+    </LinearLayout>
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/menu"
