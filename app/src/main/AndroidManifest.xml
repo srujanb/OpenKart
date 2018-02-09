@@ -51,6 +51,7 @@
             android:label="@string/title_activity_maps" />
         <activity android:name=".ForgotActivity" />
         <activity android:name=".SignUp" />
+        <activity android:name=".PhoneAuth"></activity>
     </application>
 
 </manifest>
