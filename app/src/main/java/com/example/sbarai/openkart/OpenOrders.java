@@ -44,10 +44,10 @@ public class OpenOrders extends AppCompatActivity {
     private RvProspectOrderAdapter adapter;
     DatabaseReference prospectOrdersReference;
     GeoFire geoFire;
-    static List<ProspectOrder> data;
+    static List<String> data;
     double fetchRadius = 2;
-    int totalKeysEntered;
-    Boolean isGeoQueryReady;
+//    int totalKeysEntered;
+//    Boolean isGeoQueryReady;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,32 +155,15 @@ public class OpenOrders extends AppCompatActivity {
 
     public void fetchData(Location location){
         data = new ArrayList<>();
-        totalKeysEntered = 0;
-        isGeoQueryReady = false;
-        Log.d("TAGG","Location: " + location.getLatitude() + ", " + location.getLongitude());
+//        totalKeysEntered = 0;
+//        isGeoQueryReady = false;
         GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(location.getLatitude(), location.getLongitude()), fetchRadius);
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
-                totalKeysEntered++;
-                DatabaseReference ref = FirebaseManager.getRefToSpecificProspectOrder(key);
-                ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        ProspectOrder order = dataSnapshot.getValue(ProspectOrder.class);
-                        if (order == null){
-                            Log.d("TAGG","Order is null");
-                        }else {
-                            insertIntoData(order);
-//                            Log.d("TAGG","data size: " + data.size());
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+//                totalKeysEntered++;
+                Log.d("TAGG","onKeyEntered");
+                insertIntoData(key);
             }
 
             @Override
@@ -195,8 +178,8 @@ public class OpenOrders extends AppCompatActivity {
 
             @Override
             public void onGeoQueryReady() {
-                isGeoQueryReady = true;
-                Log.d("TAGG","onGeoQueryReady");
+//                isGeoQueryReady = true;
+                setRecyclerView();
             }
 
             @Override
@@ -206,12 +189,12 @@ public class OpenOrders extends AppCompatActivity {
         });
     }
 
-    private void insertIntoData(ProspectOrder order) {
-        data.add(order);
-        if (isGeoQueryReady && data.size() == totalKeysEntered){
-            setRecyclerView();
-        }
-        Log.d("TAGG","insertIntoData - data size: " + data.size());
+    private void insertIntoData(String key) {
+        data.add(key);
+//        if (isGeoQueryReady && data.size() == totalKeysEntered){
+//            setRecyclerView();
+//        }
+//        Log.d("TAGG","insertIntoData - data size: " + data.size());
     }
 
     public void setRecyclerView(){
