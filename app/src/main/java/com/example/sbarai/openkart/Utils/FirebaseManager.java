@@ -30,6 +30,11 @@ public class FirebaseManager {
         return ref.child(Constants.FirebaseManager.PROSPECT_ORDERS);
     }
 
+    public static DatabaseReference getRefToSpecificProspectOrder(String key){
+        DatabaseReference ref = getRefToProspectOrders();
+        return ref.child(key);
+    }
+
     public static DatabaseReference getRefToGeofireForProspectOrders(){
         DatabaseReference ref = getRefToOpenOrders();
         return ref.child(Constants.FirebaseManager.GEO_FIRE);
