@@ -275,11 +275,20 @@ public class PhoneAuth extends AppCompatActivity implements
                                 @Override
                                 public void onDataChange(DataSnapshot snapshot) {
                                     if (snapshot.getValue() != null) {
-
-                                        Intent y = new Intent(PhoneAuth.this, MainActivity.class);
-                                        y.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        y.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(y);
+                                        if(snapshot.getChildren() == null)
+                                        {
+                                            Intent show = new Intent(PhoneAuth.this, SignUp.class);
+                                            show.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            show.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            startActivity(show);
+                                        }
+                                        else
+                                        {
+                                            Intent y = new Intent(PhoneAuth.this, MainActivity.class);
+                                            y.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            y.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            startActivity(y);
+                                        }
 
                                         SharedPreferences mPreferences;
 
@@ -305,7 +314,7 @@ public class PhoneAuth extends AppCompatActivity implements
                                         myRef.child("users").child(userID).child("contact").setValue(contactno);
 
 
-                                        Intent y = new Intent(PhoneAuth.this, MainActivity.class);
+                                        Intent y = new Intent(PhoneAuth.this, SignUp.class);
                                         y.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                         y.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(y);
