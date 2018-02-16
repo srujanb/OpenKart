@@ -1,182 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ProspectOrderDetails">
 
-    <include
-        android:id="@+id/appbar"
-        layout="@layout/appbar_prospect_order_details" />
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/open_orders"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/appbar"
-            android:layout_above="@id/bottom_sheet"
-            android:layout_margin="8dp"
-            android:elevation="4dp"
-            app:cardCornerRadius="4dp">
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:weightSum="1" >
-
-                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="1" >
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="textEnd"
-                        android:padding="10dp"
-                        android:layout_weight="0.5"
-                        android:text="Store name - "
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/storeName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="textStart"
-                        android:padding="10dp"
-                        android:layout_weight="0.5"
-                        android:text="Walmart"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="1" >
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="textEnd"
-                        android:padding="10dp"
-                        android:layout_weight="0.5"
-                        android:text="Order Target - "
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/orderTarget"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="textStart"
-                        android:padding="10dp"
-                        android:layout_weight="0.5"
-                        android:text="$35"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="1" >
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="textEnd"
-                        android:padding="10dp"
-                        android:layout_weight="0.5"
-                        android:text="Order Reached - "
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/orderReached"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="textStart"
-                        android:padding="10dp"
-                        android:layout_weight="0.5"
-                        android:text="$18"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="1" >
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="textEnd"
-                        android:padding="10dp"
-                        android:layout_weight="0.5"
-                        android:text="Order Initiated by - "
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/initiatedBy"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="textStart"
-                        android:padding="10dp"
-                        android:layout_weight="0.5"
-                        android:text="Dax Amin"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:padding="10dp"
-                    android:text="Shipping To:"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:padding="10dp"
-                    android:text="1705 Crest Rd, Raleigh, NC - 27606"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-        </ScrollView>
-
-    </android.support.v7.widget.CardView>
-
-    <include
-        android:id="@+id/bottom_sheet"
-        layout="@layout/bottom_sheet"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/appbar"
+            layout="@layout/appbar_prospect_order_details" />
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/open_orders"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/appbar"
+                android:layout_above="@id/bottom_sheet"
+                android:layout_margin="8dp"
+                android:elevation="4dp"
+                app:cardCornerRadius="4dp">
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:weightSum="1" >
+
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1" >
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="textEnd"
+                            android:padding="10dp"
+                            android:layout_weight="0.5"
+                            android:text="Store name - "
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/storeName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="textStart"
+                            android:padding="10dp"
+                            android:layout_weight="0.5"
+                            android:text="Walmart"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1" >
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="textEnd"
+                            android:padding="10dp"
+                            android:layout_weight="0.5"
+                            android:text="Order Target - "
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/orderTarget"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="textStart"
+                            android:padding="10dp"
+                            android:layout_weight="0.5"
+                            android:text="$35"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1" >
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="textEnd"
+                            android:padding="10dp"
+                            android:layout_weight="0.5"
+                            android:text="Order Reached - "
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/orderReached"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="textStart"
+                            android:padding="10dp"
+                            android:layout_weight="0.5"
+                            android:text="$18"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1" >
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="textEnd"
+                            android:padding="10dp"
+                            android:layout_weight="0.5"
+                            android:text="Order Initiated by - "
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/initiatedBy"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="textStart"
+                            android:padding="10dp"
+                            android:layout_weight="0.5"
+                            android:text="Dax Amin"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:padding="10dp"
+                        android:text="Shipping To:"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:padding="10dp"
+                        android:text="1705 Crest Rd, Raleigh, NC - 27606"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </ScrollView>
+
+        </android.support.v7.widget.CardView>
+
+        <include
+            android:id="@+id/bottom_sheet"
+            layout="@layout/bottom_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true" />
 
 
-</RelativeLayout>
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
