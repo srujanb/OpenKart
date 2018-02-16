@@ -1,6 +1,7 @@
 package com.example.sbarai.openkart.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.sbarai.openkart.Models.ProspectOrder;
+import com.example.sbarai.openkart.ProspectOrderDetails;
 import com.example.sbarai.openkart.R;
-import com.example.sbarai.openkart.Utils.Constants;
 import com.example.sbarai.openkart.Utils.FirebaseManager;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,9 +32,11 @@ public class RvProspectOrderAdapter extends RecyclerView.Adapter<RvProspectOrder
 
     private LayoutInflater inflater;
     private List<String> data = Collections.EMPTY_LIST;
+    private Context context;
 
     public RvProspectOrderAdapter(Context context, List<String> data){
         inflater = LayoutInflater.from(context);
+        this.context = context;
         if (data.size() == 0)
             this.data = new ArrayList<>();
         else
@@ -51,6 +54,17 @@ public class RvProspectOrderAdapter extends RecyclerView.Adapter<RvProspectOrder
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         holder.storeTitle.setText("Loading...");
         setContentToHolder(holder,position,1);
+        holder.rootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToOrderDetails();
+            }
+        });
+    }
+
+    private void goToOrderDetails() {
+        Intent intent = new Intent(context, ProspectOrderDetails.class);
+        context.startActivity(intent);
     }
 
     public void setContentToHolder(final MyViewHolder holder,final int position, final int attempt){
@@ -89,9 +103,11 @@ public class RvProspectOrderAdapter extends RecyclerView.Adapter<RvProspectOrder
     class MyViewHolder extends RecyclerView.ViewHolder{
 
         TextView storeTitle;
+        View rootView;
         public MyViewHolder(View itemView) {
             super(itemView);
             storeTitle = itemView.findViewById(R.id.storeName);
+            rootView = itemView.findViewById(R.id.root);
         }
     }
 }
