@@ -126,9 +126,6 @@ public class OpenOrders extends AppCompatActivity {
         testingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                FirebaseDatabase database = FirebaseDatabase.getInstance();
-//                DatabaseReference ref = database.getReference();
-//                ref.setValue("Hello");
             }
         });
     }
