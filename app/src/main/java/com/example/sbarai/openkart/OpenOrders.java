@@ -32,6 +32,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class OpenOrders extends AppCompatActivity {
@@ -44,7 +45,7 @@ public class OpenOrders extends AppCompatActivity {
     private RvProspectOrderAdapter adapter;
     DatabaseReference prospectOrdersReference;
     GeoFire geoFire;
-    static List<String> data;
+    static List<String> data = Collections.emptyList();
     double fetchRadius = 2;
 //    int totalKeysEntered;
 //    Boolean isGeoQueryReady;
@@ -62,6 +63,7 @@ public class OpenOrders extends AppCompatActivity {
         setFABListeners();
 
         initVariables();
+        setRecyclerView();
         executeOneTimeLocationListener();
 //        setRecyclerView();
 
@@ -179,7 +181,7 @@ public class OpenOrders extends AppCompatActivity {
             @Override
             public void onGeoQueryReady() {
 //                isGeoQueryReady = true;
-                setRecyclerView();
+                Log.d("TAGG","Geoquery ready");
             }
 
             @Override
@@ -190,23 +192,20 @@ public class OpenOrders extends AppCompatActivity {
     }
 
     private void insertIntoData(String key) {
-        data.add(key);
-//        if (isGeoQueryReady && data.size() == totalKeysEntered){
-//            setRecyclerView();
-//        }
-//        Log.d("TAGG","insertIntoData - data size: " + data.size());
+//        data.add(key);
+        adapter.insertIntoData(key);
     }
 
     public void setRecyclerView(){
-        if (data == null){
-            Toast.makeText(this, "Data is null", Toast.LENGTH_SHORT).show();
-        }else if (data.size() == 0){
-            Log.d("TAGG","setRecyclerView - data size: " + data.size());
-        } else {
+//        if (data == null){
+//            Toast.makeText(this, "Data is null", Toast.LENGTH_SHORT).show();
+//        }else if (data.size() == 0){
+//            Log.d("TAGG","setRecyclerView - data size: " + data.size());
+//        } else {
             adapter = new RvProspectOrderAdapter(this, data);
             mRecyclerView.setAdapter(adapter);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        }
+//        }
     }
 
     public void GO(View view) {

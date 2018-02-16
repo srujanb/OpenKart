@@ -24,8 +24,8 @@ public class SignUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        etname = (EditText) findViewById(R.id.name);
-        submit = (Button) findViewById(R.id.Sign_submit);
+        etname = findViewById(R.id.name);
+        submit = findViewById(R.id.Sign_submit);
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
