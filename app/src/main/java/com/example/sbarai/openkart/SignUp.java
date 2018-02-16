@@ -18,16 +18,15 @@ import com.google.firebase.database.ValueEventListener;
 public class SignUp extends AppCompatActivity {
     public DatabaseReference ref;
     EditText etname;
-    Button btnSubmit;
-
     Button submit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        etname = (EditText) findViewById(R.id.name);
-        btnSubmit = (Button) findViewById(R.id.Sign_submit);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
+        etname = (EditText) findViewById(R.id.name);
+        submit = (Button) findViewById(R.id.Sign_submit);
+
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
