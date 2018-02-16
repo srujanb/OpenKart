@@ -2,6 +2,7 @@ package com.example.sbarai.openkart.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,11 +30,14 @@ public class RvProspectOrderAdapter extends RecyclerView.Adapter<RvProspectOrder
 
 
     private LayoutInflater inflater;
-    List<String> data = Collections.EMPTY_LIST;
+    private List<String> data = Collections.EMPTY_LIST;
 
     public RvProspectOrderAdapter(Context context, List<String> data){
         inflater = LayoutInflater.from(context);
-        this.data = data;
+        if (data.size() == 0)
+            this.data = new ArrayList<>();
+        else
+            this.data = data;
     }
 
     @Override
@@ -73,6 +78,12 @@ public class RvProspectOrderAdapter extends RecyclerView.Adapter<RvProspectOrder
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+    public void insertIntoData(String key) {
+        data.add(key);
+        this.notifyDataSetChanged();
+        Log.d("TAGG","Notifying dataset changed");
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
