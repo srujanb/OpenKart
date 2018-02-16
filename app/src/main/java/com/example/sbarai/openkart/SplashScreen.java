@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
+import android.util.Log;
 
 
 import com.google.firebase.FirebaseApp;
@@ -17,7 +17,6 @@ import com.google.firebase.database.ValueEventListener;
 
 public class SplashScreen extends AppCompatActivity {
     public DatabaseReference ref;
-    private FirebaseAuth mAuth;
     String userId;
 
     @Override
@@ -25,32 +24,37 @@ public class SplashScreen extends AppCompatActivity {
 
         FirebaseDatabase database =FirebaseDatabase.getInstance();
         ref = database.getReference();
-        FirebaseAuth loginCheck;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         FirebaseApp.initializeApp(this);
-        userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        Log.d("TAGG","Splash screen created");
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(mAuth.getInstance().getCurrentUser() == null)
+                if(FirebaseAuth.getInstance().getCurrentUser() == null)
                 {
+                    Log.d("TAGG","User is null");
                     Intent show = new Intent(SplashScreen.this, PhoneAuth.class);
                     startActivity(show);
                 }
                 else
                 {
+                    Log.d("TAGG","User is not null");
+                    userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     ref.child("users").child(userId).child("name").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if(dataSnapshot.getValue() == null)
                             {
+                                Log.d("TAGG","user name data snapshot is null");
                                 Intent show = new Intent(SplashScreen.this, SignUp.class);
                                 startActivity(show);
                             }
                             else {
+                                Log.d("TAGG","user name data snapshot is NOT null");
                                 Intent show = new Intent(SplashScreen.this, MainActivity.class);
                                 startActivity(show);
                             }
