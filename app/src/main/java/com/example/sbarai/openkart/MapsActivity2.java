@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MainActivity2 extends AppCompatActivity {
+public class MapsActivity2 extends AppCompatActivity {
 
     FloatingActionButton createProspectOrder;
     FloatingActionButton testingButton;
@@ -119,7 +119,7 @@ public class MainActivity2 extends AppCompatActivity {
         createProspectOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity2.this,CreateProspectOrder.class));
+                startActivity(new Intent(MapsActivity2.this,CreateProspectOrder.class));
             }
         });
 
