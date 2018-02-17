@@ -52,7 +52,7 @@
         <activity android:name=".ForgotActivity" />
         <activity android:name=".SignUp" />
         <activity android:name=".PhoneAuth" />
-        <activity android:name=".ProspectOrderDetails"></activity>
+        <activity android:name=".ProspectOrderDetails" />
     </application>
 
 </manifest>
