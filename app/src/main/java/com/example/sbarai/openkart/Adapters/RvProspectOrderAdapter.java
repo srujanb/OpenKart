@@ -100,6 +100,12 @@ public class RvProspectOrderAdapter extends RecyclerView.Adapter<RvProspectOrder
         Log.d("TAGG","Notifying dataset changed");
     }
 
+    public void removeFromData(String key) {
+        data.remove(key);
+        Log.d("TAGG","removed from data, new size" + data.size());
+        this.notifyDataSetChanged();
+    }
+
     class MyViewHolder extends RecyclerView.ViewHolder{
 
         TextView storeTitle;

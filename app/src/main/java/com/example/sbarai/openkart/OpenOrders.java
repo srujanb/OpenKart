@@ -47,6 +47,7 @@ public class OpenOrders extends AppCompatActivity {
     GeoFire geoFire;
     static List<String> data = Collections.emptyList();
     double fetchRadius = 2;
+    GeoQuery geoQuery;
 //    int totalKeysEntered;
 //    Boolean isGeoQueryReady;
 
@@ -156,7 +157,7 @@ public class OpenOrders extends AppCompatActivity {
         data = new ArrayList<>();
 //        totalKeysEntered = 0;
 //        isGeoQueryReady = false;
-        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(location.getLatitude(), location.getLongitude()), fetchRadius);
+        geoQuery = geoFire.queryAtLocation(new GeoLocation(location.getLatitude(), location.getLongitude()), fetchRadius);
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
@@ -167,7 +168,8 @@ public class OpenOrders extends AppCompatActivity {
 
             @Override
             public void onKeyExited(String key) {
-
+                Log.d("TAGG","onKeyEdited");
+                removeFromData(key);
             }
 
             @Override
@@ -186,6 +188,10 @@ public class OpenOrders extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void removeFromData(String key) {
+        adapter.removeFromData(key);
     }
 
     private void insertIntoData(String key) {
@@ -209,6 +215,11 @@ public class OpenOrders extends AppCompatActivity {
         EditText et = findViewById(R.id.radius);
         String string = et.getText().toString();
         fetchRadius = Double.parseDouble(string);
-        executeOneTimeLocationListener();
+        if (geoQuery != null){
+            geoQuery.setRadius(fetchRadius);
+        }else{
+            Toast.makeText(this, "Error: GeoQuery null", Toast.LENGTH_SHORT).show();
+        }
+//        executeOneTimeLocationListener();
     }
 }
