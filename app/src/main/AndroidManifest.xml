@@ -53,9 +53,6 @@
         <activity android:name=".SignUp" />
         <activity android:name=".PhoneAuth" />
         <activity android:name=".ProspectOrderDetails" />
-        <activity
-            android:name=".MapsActivity2"
-            android:label="@string/title_activity_maps2"></activity>
     </application>
 
 </manifest>
