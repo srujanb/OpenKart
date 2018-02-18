@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sbarai.openkart.Adapters.RvProspectOrderAdapter;
@@ -30,6 +31,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.warkiz.widget.IndicatorSeekBar;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,7 +48,7 @@ public class OpenOrders extends AppCompatActivity {
     DatabaseReference prospectOrdersReference;
     GeoFire geoFire;
     static List<String> data = Collections.emptyList();
-    double fetchRadius = 2;
+    double fetchRadius = 0;
     GeoQuery geoQuery;
 //    int totalKeysEntered;
 //    Boolean isGeoQueryReady;
@@ -66,6 +68,7 @@ public class OpenOrders extends AppCompatActivity {
         initVariables();
         setRecyclerView();
         executeOneTimeLocationListener();
+        setRadiusSeekBar();
 //        setRecyclerView();
 
 
@@ -211,15 +214,38 @@ public class OpenOrders extends AppCompatActivity {
 //        }
     }
 
-    public void GO(View view) {
-        EditText et = findViewById(R.id.radius);
-        String string = et.getText().toString();
-        fetchRadius = Double.parseDouble(string);
-        if (geoQuery != null){
-            geoQuery.setRadius(fetchRadius);
-        }else{
-            Toast.makeText(this, "Error: GeoQuery null", Toast.LENGTH_SHORT).show();
-        }
-//        executeOneTimeLocationListener();
+    private void setRadiusSeekBar() {
+        IndicatorSeekBar seekBar = findViewById(R.id.radius_seekbar);
+        seekBar.setOnSeekChangeListener(new IndicatorSeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(IndicatorSeekBar seekBar, int progress, float progressFloat, boolean fromUserTouch) {
+                changeRadius(progressFloat);
+            }
+
+            @Override
+            public void onSectionChanged(IndicatorSeekBar seekBar, int thumbPosOnTick, String textBelowTick, boolean fromUserTouch) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(IndicatorSeekBar seekBar, int thumbPosOnTick) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
+
+            }
+        });
+        seekBar.setProgress((float)2.0);
+    }
+
+    private void changeRadius(float progressFloat) {
+        fetchRadius = progressFloat;
+        if (geoQuery != null)
+            geoQuery.setRadius(progressFloat);
+        TextView radiusValue = findViewById(R.id.radius_value);
+        String string = "" + progressFloat + " miles";
+        radiusValue.setText(string);
     }
 }
