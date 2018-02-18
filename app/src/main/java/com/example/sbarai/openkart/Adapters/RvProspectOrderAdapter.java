@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sbarai.openkart.Models.ProspectOrder;
@@ -33,6 +34,7 @@ public class RvProspectOrderAdapter extends RecyclerView.Adapter<RvProspectOrder
     private LayoutInflater inflater;
     private List<String> data = Collections.EMPTY_LIST;
     private Context context;
+    private View noDataFound;
 
     public RvProspectOrderAdapter(Context context, List<String> data){
         inflater = LayoutInflater.from(context);
@@ -41,6 +43,10 @@ public class RvProspectOrderAdapter extends RecyclerView.Adapter<RvProspectOrder
             this.data = new ArrayList<>();
         else
             this.data = data;
+    }
+
+    public void setNoDataFound(View view){
+        noDataFound = view;
     }
 
     @Override
@@ -89,6 +95,16 @@ public class RvProspectOrderAdapter extends RecyclerView.Adapter<RvProspectOrder
         });
     }
 
+    public void dataSetChanged(){
+        if (data.size() == 0){
+            noDataFound.setVisibility(View.VISIBLE);
+            Log.d("TAGG","making visible");
+        }else{
+            noDataFound.setVisibility(View.GONE);
+            Log.d("TAGG","making gone");
+        }
+    }
+
     @Override
     public int getItemCount() {
         return data.size();
@@ -96,15 +112,17 @@ public class RvProspectOrderAdapter extends RecyclerView.Adapter<RvProspectOrder
 
     public void insertIntoData(String key) {
         data.add(key);
+        dataSetChanged();
         notifyItemInserted(data.indexOf(key));
-        Log.d("TAGG","Notifying dataset changed");
+//        Log.d("TAGG","Notifying dataset changed");
     }
 
     public void removeFromData(String key) {
         int index = data.indexOf(key);
         data.remove(index);
         notifyItemRemoved(index);
-        Log.d("TAGG","removed from data, new size" + data.size());
+//        dataSetChanged();
+//        Log.d("TAGG","removed from data, new size" + data.size());
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{

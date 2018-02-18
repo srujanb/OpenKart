@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,10 +26,8 @@ import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 import com.warkiz.widget.IndicatorSeekBar;
 
 import java.util.ArrayList;
@@ -39,8 +36,9 @@ import java.util.List;
 
 public class OpenOrders extends AppCompatActivity {
 
-    FloatingActionButton createProspectOrder;
+    FloatingActionButton createProspectOrderMenu;
     FloatingActionButton testingButton;
+    View createProspectOrderCard;
     Toolbar toolbar;
     private FusedLocationProviderClient mFusedLocationClient;
     RecyclerView mRecyclerView;
@@ -66,12 +64,22 @@ public class OpenOrders extends AppCompatActivity {
         setFABListeners();
 
         initVariables();
+        setListeners();
         setRecyclerView();
         executeOneTimeLocationListener();
         setRadiusSeekBar();
 //        setRecyclerView();
 
 
+    }
+
+    private void setListeners() {
+        createProspectOrderCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openCreateProspectOrderActivity();
+            }
+        });
     }
 
     private void executeOneTimeLocationListener() {
@@ -115,15 +123,16 @@ public class OpenOrders extends AppCompatActivity {
     }
 
     private void defineVariables() {
-        createProspectOrder = findViewById(R.id.menu_item_1);
+        createProspectOrderMenu = findViewById(R.id.menu_item_1);
+        createProspectOrderCard = findViewById(R.id.no_data_found);
         testingButton = findViewById(R.id.menu_item_2);
     }
 
     private void setFABListeners() {
-        createProspectOrder.setOnClickListener(new View.OnClickListener() {
+        createProspectOrderMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(OpenOrders.this,CreateProspectOrder.class));
+                openCreateProspectOrderActivity();
             }
         });
 
@@ -132,6 +141,10 @@ public class OpenOrders extends AppCompatActivity {
             public void onClick(View view) {
             }
         });
+    }
+
+    public void openCreateProspectOrderActivity() {
+        startActivity(new Intent(OpenOrders.this,CreateProspectOrder.class));
     }
 
     public List<ProspectOrder> getData(){
@@ -171,7 +184,7 @@ public class OpenOrders extends AppCompatActivity {
 
             @Override
             public void onKeyExited(String key) {
-                Log.d("TAGG","onKeyEdited");
+                Log.d("TAGG","onKeyExited");
                 removeFromData(key);
             }
 
@@ -184,6 +197,7 @@ public class OpenOrders extends AppCompatActivity {
             public void onGeoQueryReady() {
 //                isGeoQueryReady = true;
                 Log.d("TAGG","Geoquery ready");
+                adapter.dataSetChanged();
             }
 
             @Override
@@ -209,6 +223,7 @@ public class OpenOrders extends AppCompatActivity {
 //            Log.d("TAGG","setRecyclerView - data size: " + data.size());
 //        } else {
             adapter = new RvProspectOrderAdapter(this, data);
+            adapter.setNoDataFound(findViewById(R.id.no_data_found));
             mRecyclerView.setAdapter(adapter);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 //        }
