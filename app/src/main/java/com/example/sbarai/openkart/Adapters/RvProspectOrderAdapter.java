@@ -96,14 +96,15 @@ public class RvProspectOrderAdapter extends RecyclerView.Adapter<RvProspectOrder
 
     public void insertIntoData(String key) {
         data.add(key);
-        this.notifyDataSetChanged();
+        notifyItemInserted(data.indexOf(key));
         Log.d("TAGG","Notifying dataset changed");
     }
 
     public void removeFromData(String key) {
-        data.remove(key);
+        int index = data.indexOf(key);
+        data.remove(index);
+        notifyItemRemoved(index);
         Log.d("TAGG","removed from data, new size" + data.size());
-        this.notifyDataSetChanged();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{

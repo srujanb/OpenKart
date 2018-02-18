@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     tools:context="com.example.sbarai.openkart.OpenOrders">
 
     <include
@@ -17,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#eee"
-        android:layout_below="@id/appbar"/>
+        android:layout_below="@id/appbar" />
 
     <LinearLayout
         android:layout_width="match_parent"

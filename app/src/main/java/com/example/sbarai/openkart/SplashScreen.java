@@ -39,6 +39,7 @@ public class SplashScreen extends AppCompatActivity {
                     Log.d("TAGG","User is null");
                     Intent show = new Intent(SplashScreen.this, PhoneAuth.class);
                     startActivity(show);
+                    finish();
                 }
                 else
                 {
@@ -58,6 +59,7 @@ public class SplashScreen extends AppCompatActivity {
                                 Intent show = new Intent(SplashScreen.this, MainActivity.class);
                                 startActivity(show);
                             }
+                            finish();
                         }
 
                         @Override
@@ -67,7 +69,6 @@ public class SplashScreen extends AppCompatActivity {
                     });
 
                 }
-                finish();
             }
         },500);
     }
