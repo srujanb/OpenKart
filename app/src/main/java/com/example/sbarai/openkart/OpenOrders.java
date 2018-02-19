@@ -3,6 +3,9 @@ package com.example.sbarai.openkart;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,6 +37,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
+
 public class OpenOrders extends AppCompatActivity {
 
     FloatingActionButton createProspectOrderMenu;
@@ -48,6 +53,7 @@ public class OpenOrders extends AppCompatActivity {
     static List<String> data = Collections.emptyList();
     double fetchRadius = 0;
     GeoQuery geoQuery;
+    SmoothProgressBar progressBar;
 //    int totalKeysEntered;
 //    Boolean isGeoQueryReady;
 
@@ -110,6 +116,7 @@ public class OpenOrders extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.rv_open_orders);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         geoFire = new GeoFire(FirebaseManager.getRefToGeofireForProspectOrders());
+        progressBar = findViewById(R.id.progress_bar);
     }
 
     @Override
@@ -196,6 +203,7 @@ public class OpenOrders extends AppCompatActivity {
             @Override
             public void onGeoQueryReady() {
 //                isGeoQueryReady = true;
+                progressBar.setVisibility(View.GONE);
                 Log.d("TAGG","Geoquery ready");
                 adapter.dataSetChanged();
             }
@@ -256,6 +264,7 @@ public class OpenOrders extends AppCompatActivity {
     }
 
     private void changeRadius(float progressFloat) {
+        progressBar.setVisibility(View.VISIBLE);
         fetchRadius = progressFloat;
         if (geoQuery != null)
             geoQuery.setRadius(progressFloat);

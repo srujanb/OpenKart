@@ -43,7 +43,7 @@ dependencies {
     compile 'com.google.firebase:firebase-crash:11.8.0'
     compile 'com.google.firebase:firebase-messaging:11.8.0'
     compile 'com.github.warkiz.widget:indicatorseekbar:1.2.9' // Seekbar
-    compile 'com.github.BaselHorany:ProgressStatusBar:1.1.4' // Progress bar in status bar
+    compile 'com.github.castorflex.smoothprogressbar:library:1.1.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
