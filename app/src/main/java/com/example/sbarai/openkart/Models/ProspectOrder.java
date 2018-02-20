@@ -15,6 +15,7 @@ import java.util.List;
 
 public class ProspectOrder {
 
+    public String creatorKey;
     public Object dateTime; //Will be stored as milliseconds on server therefore long.
     private double locLat;
     private double locLon;
@@ -25,6 +26,14 @@ public class ProspectOrder {
     private List<Collaborator> collaborators;
     private List<Comment> comments;
     private int status;
+
+    public String getCreatorKey() {
+        return creatorKey;
+    }
+
+    public void setCreatorKey(String userKey) {
+        this.creatorKey = userKey;
+    }
 
     @Exclude
     public void setLocation(Location location){
