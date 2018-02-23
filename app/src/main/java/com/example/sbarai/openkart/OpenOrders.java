@@ -48,7 +48,6 @@ public class OpenOrders extends AppCompatActivity {
     private FusedLocationProviderClient mFusedLocationClient;
     RecyclerView mRecyclerView;
     private RvProspectOrderAdapter adapter;
-    DatabaseReference prospectOrdersReference;
     GeoFire geoFire;
     static List<String> data = Collections.emptyList();
     double fetchRadius = 0;
@@ -113,10 +112,7 @@ public class OpenOrders extends AppCompatActivity {
     }
 
     private void initVariables() {
-        mRecyclerView = findViewById(R.id.rv_open_orders);
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        geoFire = new GeoFire(FirebaseManager.getRefToGeofireForProspectOrders());
-        progressBar = findViewById(R.id.progress_bar);
+
     }
 
     @Override
@@ -133,6 +129,10 @@ public class OpenOrders extends AppCompatActivity {
         createProspectOrderMenu = findViewById(R.id.menu_item_1);
         createProspectOrderCard = findViewById(R.id.no_data_found);
         testingButton = findViewById(R.id.menu_item_2);
+        mRecyclerView = findViewById(R.id.rv_open_orders);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        geoFire = new GeoFire(FirebaseManager.getRefToGeofireForProspectOrders());
+        progressBar = findViewById(R.id.progress_bar);
     }
 
     private void setFABListeners() {
