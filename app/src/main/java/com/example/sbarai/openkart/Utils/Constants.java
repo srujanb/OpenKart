@@ -32,5 +32,6 @@ public class Constants {
         public static final String OPEN_ORDERS = "openOrders";
         public static final String PROSPECT_ORDERS = "prospectOrders";
         public static final String GEO_FIRE = "geofire";
+        public static final String USERS = "users";
     }
 }

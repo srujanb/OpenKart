@@ -40,4 +40,19 @@ public class FirebaseManager {
         return ref.child(Constants.FirebaseManager.GEO_FIRE);
     }
 
+    //User details
+    public static DatabaseReference getRefToUsersNode(){
+        DatabaseReference ref = getRootRef().child(Constants.FirebaseManager.USERS);
+        return ref;
+    }
+
+    public static DatabaseReference getRefToSpecificUser(String key){
+        DatabaseReference ref = getRefToUsersNode();
+        return ref.child(key);
+    }
+
+    public static DatabaseReference getRefToUserName(String key){
+        DatabaseReference ref = getRefToSpecificUser(key);
+        return ref.child("name");
+    }
 }
