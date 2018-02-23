@@ -52,6 +52,7 @@ public class OpenOrders extends AppCompatActivity {
     static List<String> data = Collections.emptyList();
     double fetchRadius = 0;
     GeoQuery geoQuery;
+    IndicatorSeekBar seekBar;
     SmoothProgressBar progressBar;
 //    int totalKeysEntered;
 //    Boolean isGeoQueryReady;
@@ -238,7 +239,7 @@ public class OpenOrders extends AppCompatActivity {
     }
 
     private void setRadiusSeekBar() {
-        IndicatorSeekBar seekBar = findViewById(R.id.radius_seekbar);
+        seekBar = findViewById(R.id.radius_seekbar);
         seekBar.setOnSeekChangeListener(new IndicatorSeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(IndicatorSeekBar seekBar, int progress, float progressFloat, boolean fromUserTouch) {
@@ -260,7 +261,7 @@ public class OpenOrders extends AppCompatActivity {
 
             }
         });
-        seekBar.setProgress((float)2.0);
+        seekBar.setProgress((float)1.5);
     }
 
     private void changeRadius(float progressFloat) {
