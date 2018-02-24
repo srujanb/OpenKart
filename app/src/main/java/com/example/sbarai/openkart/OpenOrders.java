@@ -3,9 +3,6 @@ package com.example.sbarai.openkart;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.net.Uri;
-import android.os.Build;
-import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,7 +27,6 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.warkiz.widget.IndicatorSeekBar;
 
 import java.util.ArrayList;
@@ -54,8 +50,7 @@ public class OpenOrders extends AppCompatActivity {
     GeoQuery geoQuery;
     IndicatorSeekBar seekBar;
     SmoothProgressBar progressBar;
-//    int totalKeysEntered;
-//    Boolean isGeoQueryReady;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,10 +147,10 @@ public class OpenOrders extends AppCompatActivity {
     }
 
     public void openCreateProspectOrderActivity() {
-        startActivity(new Intent(OpenOrders.this,CreateProspectOrder.class));
+        startActivity(new Intent(OpenOrders.this, CreateProspectOrder.class));
     }
 
-    public List<ProspectOrder> getData(){
+    public List<ProspectOrder> getData() {
         List<ProspectOrder> orders = new ArrayList<>();
         ProspectOrder order = new ProspectOrder();
         order.setDesiredStore("Walmart");
@@ -177,7 +172,7 @@ public class OpenOrders extends AppCompatActivity {
         return orders;
     }
 
-    public void fetchData(Location location){
+    public void fetchData(Location location) {
         data = new ArrayList<>();
 //        totalKeysEntered = 0;
 //        isGeoQueryReady = false;
@@ -186,13 +181,13 @@ public class OpenOrders extends AppCompatActivity {
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
 //                totalKeysEntered++;
-                Log.d("TAGG","onKeyEntered");
+                Log.d("TAGG", "onKeyEntered");
                 insertIntoData(key);
             }
 
             @Override
             public void onKeyExited(String key) {
-                Log.d("TAGG","onKeyExited");
+                Log.d("TAGG", "onKeyExited");
                 removeFromData(key);
             }
 
@@ -205,7 +200,7 @@ public class OpenOrders extends AppCompatActivity {
             public void onGeoQueryReady() {
 //                isGeoQueryReady = true;
                 progressBar.setVisibility(View.GONE);
-                Log.d("TAGG","Geoquery ready");
+                Log.d("TAGG", "Geoquery ready");
                 adapter.dataSetChanged();
             }
 
@@ -225,16 +220,16 @@ public class OpenOrders extends AppCompatActivity {
         adapter.insertIntoData(key);
     }
 
-    public void setRecyclerView(){
+    public void setRecyclerView() {
 //        if (data == null){
 //            Toast.makeText(this, "Data is null", Toast.LENGTH_SHORT).show();
 //        }else if (data.size() == 0){
 //            Log.d("TAGG","setRecyclerView - data size: " + data.size());
 //        } else {
-            adapter = new RvProspectOrderAdapter(this, data);
-            adapter.setNoDataFound(findViewById(R.id.no_data_found));
-            mRecyclerView.setAdapter(adapter);
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new RvProspectOrderAdapter(this, data);
+        adapter.setNoDataFound(findViewById(R.id.no_data_found));
+        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 //        }
     }
 
@@ -258,10 +253,24 @@ public class OpenOrders extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
-
+                recalculateSeekBarRange(seekBar);
             }
         });
-        seekBar.setProgress((float)1.5);
+        seekBar.setProgress((float) 1.5);
+    }
+
+    private void recalculateSeekBarRange(IndicatorSeekBar seekBar) {
+        float currentValue = seekBar.getProgressFloat();
+        float maxValue = seekBar.getMax();
+        if (currentValue < 0.05 * maxValue) return;
+        if (currentValue < 0.2 * maxValue) {
+            seekBar.setMax((float) (maxValue*(3.0/5.0)));
+        }
+        if (currentValue > 0.8 * maxValue) {
+            seekBar.setMax((float) (maxValue*(7.0/5.0)));
+
+        }
+        seekBar.setProgress(currentValue);
     }
 
     private void changeRadius(float progressFloat) {
