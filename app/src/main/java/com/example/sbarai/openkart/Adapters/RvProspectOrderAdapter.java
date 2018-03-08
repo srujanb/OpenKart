@@ -63,13 +63,14 @@ public class RvProspectOrderAdapter extends RecyclerView.Adapter<RvProspectOrder
         holder.rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToOrderDetails();
+                goToOrderDetails(data.get(position));
             }
         });
     }
 
-    private void goToOrderDetails() {
+    private void goToOrderDetails(String id) {
         Intent intent = new Intent(context, ProspectOrderDetails.class);
+        intent.putExtra("POid",id);
         context.startActivity(intent);
     }
 
