@@ -1,5 +1,6 @@
 package com.example.sbarai.openkart;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,14 +16,22 @@ import com.example.sbarai.openkart.Models.POChatMessage;
 import com.example.sbarai.openkart.Utils.FirebaseManager;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.IllegalFormatCodePointException;
 
 public class POChatActivity extends AppCompatActivity {
 
     String POid;
+    String currentUserId;
     String pathToChat = "appData/openOrders/prospectOrders/chat";
     RecyclerView recyclerView;
     FirebaseRecyclerAdapter adapter;
@@ -32,6 +41,7 @@ public class POChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pochat);
         POid = (String) getIntent().getExtras().get("POid");
+        currentUserId = FirebaseAuth.getInstance().getUid();
         setRecyclerView();
         initSendMessage();
 
@@ -49,13 +59,18 @@ public class POChatActivity extends AppCompatActivity {
     }
 
     private void sendMessage() {
-        EditText editText = findViewById(R.id.edittext);
+        final EditText editText = findViewById(R.id.edittext);
         String content = String.valueOf(editText.getText());
         String userId = FirebaseAuth.getInstance().getUid();
         POChatMessage message = new POChatMessage(userId,content);
 
         DatabaseReference referenceToChat = FirebaseManager.getRefToSpecificProspectOrder(POid).child("chat");
-        referenceToChat.push().setValue(message);
+        referenceToChat.push().setValue(message).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                editText.setText("");
+            }
+        });
     }
 
     private void setRecyclerView() {
@@ -85,8 +100,27 @@ public class POChatActivity extends AppCompatActivity {
             protected void onBindViewHolder(ChatHolder holder, int position, POChatMessage model) {
                 // Bind the Chat object to the ChatHolder
                 // ...
-                holder.sender.setText("Srujan");
-                holder.content.setText(model.getMessageContent());
+                holder.messageObject = model;
+                if (model.getUserId().equals(currentUserId)){
+                    try {
+                        setSentMessage(holder, model);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }else{
+                    try {
+                        setReceivedMessage(holder, model);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(ChatHolder holder) {
+                super.onViewDetachedFromWindow(holder);
+                FirebaseManager.getRefToUserName(holder.messageObject.getUserId()).removeEventListener(holder.sentMessageListener);
+                FirebaseManager.getRefToUserName(holder.messageObject.getUserId()).removeEventListener(holder.receivedMessageListener);
             }
 
             @Override
@@ -99,11 +133,45 @@ public class POChatActivity extends AppCompatActivity {
         recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
-                scrollChatToEnd();
+//                scrollChatToEnd();
             }
         });
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void setSentMessage(final ChatHolder holder, POChatMessage model) {
+        hideReceivedMessage(holder);
+        showSentMessageAndClearValues(holder);
+        holder.sentContent.setText(model.getMessageContent());
+        FirebaseManager.getRefToUserName(model.getUserId()).addListenerForSingleValueEvent(holder.sentMessageListener);
+    }
+
+    private void setReceivedMessage(ChatHolder holder, POChatMessage model) {
+        hideSentMessage(holder);
+        showReceivedMessageAndClearValues(holder);
+        holder.receivedContent.setText(model.getMessageContent());
+        FirebaseManager.getRefToUserName(model.getUserId()).addListenerForSingleValueEvent(holder.receivedMessageListener);
+    }
+
+    private void hideReceivedMessage(ChatHolder holder) {
+        holder.receivingMessageView.setVisibility(View.INVISIBLE);
+    }
+
+    private void hideSentMessage(ChatHolder holder) {
+        holder.sendingMessageView.setVisibility(View.INVISIBLE);
+    }
+
+    private void showSentMessageAndClearValues(ChatHolder holder) {
+        holder.sendingMessageView.setVisibility(View.VISIBLE);
+        holder.sentSender.setText("");
+        holder.sentContent.setText("something");
+    }
+
+    private void showReceivedMessageAndClearValues(ChatHolder holder) {
+        holder.receivingMessageView.setVisibility(View.VISIBLE);
+        holder.receivedSender.setText("");
+        holder.receivedContent.setText("something");
     }
 
     private void scrollChatToEnd() {
@@ -111,12 +179,46 @@ public class POChatActivity extends AppCompatActivity {
     }
 
     private class ChatHolder extends RecyclerView.ViewHolder {
-        TextView sender;
-        TextView content;
+        View receivingMessageView;
+        View sendingMessageView;
+        TextView sentSender;
+        TextView sentContent;
+        TextView receivedSender;
+        TextView receivedContent;
+        POChatMessage messageObject;
+
+        ValueEventListener sentMessageListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                sentSender.setText(dataSnapshot.getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                sentSender.setText("[Error loading name]");
+            }
+        };
+
+        ValueEventListener receivedMessageListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                receivedSender.setText(dataSnapshot.getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                receivedContent.setText("[Error loading name]");
+            }
+        };
+
         public ChatHolder(View view) {
             super(view);
-            sender = view.findViewById(R.id.sender);
-            content = view.findViewById(R.id.content);
+            receivingMessageView = view.findViewById(R.id.type_received);
+            sendingMessageView = view.findViewById(R.id.type_sent);
+            sentSender = view.findViewById(R.id.sent_sender);
+            sentContent = view.findViewById(R.id.sent_content);
+            receivedSender = view.findViewById(R.id.received_sender);
+            receivedContent = view.findViewById(R.id.received_content);
         }
     }
 
