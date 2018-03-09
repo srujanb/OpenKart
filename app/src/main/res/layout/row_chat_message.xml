@@ -32,7 +32,7 @@
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:layout_marginTop="2dp"
-                android:text="Srujan"
+                android:text=""
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
@@ -44,7 +44,7 @@
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:layout_marginTop="2dp"
-                android:text="This is a random message as a receiver."
+                android:text=""
                 android:textColor="@color/white" />
 
         </LinearLayout>
