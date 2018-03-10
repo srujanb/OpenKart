@@ -12,6 +12,20 @@
         android:id="@+id/appbar"
         layout="@layout/appbar_openorders" />
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/appbar"
+        android:alpha="0.1"
+        android:background="@drawable/doodle_supermarket" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.05"
+        android:background="#fff"
+        android:visibility="visible" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
