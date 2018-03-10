@@ -53,7 +53,8 @@
         <activity android:name=".ForgotActivity" />
         <activity android:name=".ProspectOrderDetails" />
         <activity android:name=".EditProfileActivity" />
-        <activity android:name=".POChatActivity"></activity>
+        <activity android:name=".POChatActivity" />
+        <activity android:name=".OpenOrderAddItem"></activity>
     </application>
 
 </manifest>
