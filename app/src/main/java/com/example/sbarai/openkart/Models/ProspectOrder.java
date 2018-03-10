@@ -5,6 +5,7 @@ import android.location.Location;
 import com.google.firebase.database.Exclude;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -23,10 +24,10 @@ public class ProspectOrder {
     private float colabRadius;
     private String desiredStore;
     private long orderDate; //Can be easily converted to String from java.time
-    private float targetTotal;
-    private List<Collaborator> collaborators;
-    private List<Comment> comments;
+    private HashMap<String,Collaborator> collaborators;
+//    private List<Comment> comments;
     private int status;
+    private float targetTotal;
 
     public String getCreatorKey() {
         return creatorKey;
@@ -94,6 +95,19 @@ public class ProspectOrder {
         return targetTotal;
     }
 
+    public HashMap<String, Collaborator> getCollaborators() {
+        return collaborators;
+    }
+    public void setCollaborators(HashMap<String, Collaborator> collaborators) {
+        this.collaborators = collaborators;
+    }
+
+    public void addCollaborator(Collaborator collaborator){
+        if (collaborators == null)
+            collaborators = new HashMap<>();
+        collaborators.put(collaborator.getUserId(),collaborator);
+    }
+
     public void setTargetTotal(float targetTotal) {
         this.targetTotal = targetTotal;
     }
@@ -104,17 +118,6 @@ public class ProspectOrder {
 
     public void setStatus(int status) {
         this.status = status;
-    }
-
-    public List<Collaborator> getCollaborators(){
-        if (collaborators == null){
-            return Collections.EMPTY_LIST;
-        }
-        return collaborators;
-    }
-
-    public void setCollaborators(List<Collaborator> collaborators){
-        this.collaborators = collaborators;
     }
 
 }

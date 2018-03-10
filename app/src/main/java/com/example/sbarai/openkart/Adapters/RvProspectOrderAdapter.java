@@ -81,7 +81,16 @@ public class RvProspectOrderAdapter extends RecyclerView.Adapter<RvProspectOrder
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ProspectOrder oder = dataSnapshot.getValue(ProspectOrder.class);
-                holder.storeTitle.setText(oder.getDesiredStore());
+                try {
+                    holder.storeTitle.setText(oder.getDesiredStore());
+                }catch (Exception e){
+                    e.printStackTrace();
+                    if (oder == null)
+                        Log.d("TAGG","order is null");
+                    else if (oder.getDesiredStore() == null){
+                        Log.d("TAGG","order.getDesiredStore is null");
+                    }
+                }
             }
 
             @Override

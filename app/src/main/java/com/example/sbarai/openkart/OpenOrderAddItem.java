@@ -25,6 +25,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class OpenOrderAddItem extends AppCompatActivity {
@@ -81,45 +82,25 @@ public class OpenOrderAddItem extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ProspectOrder order = dataSnapshot.getValue(ProspectOrder.class);
-                List<Collaborator> collaborators = null;
-                if (order != null) {
-                    collaborators = order.getCollaborators();
+                if (order == null){
+                    return;
                 }
-                if (collaborators == null){
-                    collaborators = new ArrayList<>();
-                }
-                Collaborator currentCollaborator = null;
-                for (Collaborator collaborator:collaborators){
-                    if (collaborator.getUserId().equals(userId)){
-                        currentCollaborator = collaborator;
-                        break;
-                    }
-                }
-                if (currentCollaborator == null){
+                Collaborator currentCollaborator;
+                if (order.getCollaborators() == null)
+                    order.setCollaborators(new HashMap<String, Collaborator>());
+                if (order.getCollaborators().get(userId) != null) {
+                    currentCollaborator = order.getCollaborators().get(userId);
+                }else{
                     currentCollaborator = new Collaborator();
                     currentCollaborator.setUserId(userId);
-                }else {
-                    collaborators.remove(currentCollaborator);
                 }
                 currentCollaborator.addCollaborationItem(item);
-                collaborators = new ArrayList<>(collaborators);
-                collaborators.add(currentCollaborator);
-                if (order != null) {
-                    order.setCollaborators(collaborators);
-                }
-                Gson gson = new Gson();
-                String json = gson.toJson(collaborators);
-                Log.d("TAGG","Collaborators:" + json);
+                order.addCollaborator(currentCollaborator);
                 dataSnapshot.getRef().setValue(order).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(OpenOrderAddItem.this, "Item added", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OpenOrderAddItem.this, "Item added successfully", Toast.LENGTH_SHORT).show();
                         finish();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(OpenOrderAddItem.this, "Some error occurent. Please check", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
