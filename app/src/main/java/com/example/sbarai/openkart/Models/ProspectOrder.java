@@ -4,6 +4,7 @@ import android.location.Location;
 
 import com.google.firebase.database.Exclude;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -103,6 +104,17 @@ public class ProspectOrder {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public List<Collaborator> getCollaborators(){
+        if (collaborators == null){
+            return Collections.EMPTY_LIST;
+        }
+        return collaborators;
+    }
+
+    public void setCollaborators(List<Collaborator> collaborators){
+        this.collaborators = collaborators;
     }
 
 }

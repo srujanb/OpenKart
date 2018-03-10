@@ -8,11 +8,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.sbarai.openkart.Models.ProspectOrder;
+
 public class ProspectOrderDetails extends AppCompatActivity {
 
 //    BottomSheetDialog dialog;
     String POid;
     Button chatButton;
+    View addItem;
 
 
     @Override
@@ -37,6 +40,15 @@ public class ProspectOrderDetails extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 openChat(POid);
+            }
+        });
+        addItem = findViewById(R.id.add_item);
+        addItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProspectOrderDetails.this,OpenOrderAddItem.class);
+                intent.putExtra("POid",POid);
+                startActivity(intent);
             }
         });
     }

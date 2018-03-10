@@ -1,5 +1,7 @@
 package com.example.sbarai.openkart.Models;
 
+import android.widget.Toast;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -32,6 +34,14 @@ public class Collaborator {
 
     public int getCollaborationItemsCount(){
         return getCollaborationItems().size();
+    }
+
+    public void addCollaborationItem(CollaborationItem item){
+        try {
+            getCollaborationItems().add(item);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 

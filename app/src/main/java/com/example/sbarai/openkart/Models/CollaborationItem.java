@@ -20,7 +20,7 @@ public class CollaborationItem {
         return itemName;
     }
 
-    public void seItemName(String name) {
+    public void setItemName(String name) {
         this.itemName = name;
     }
 
