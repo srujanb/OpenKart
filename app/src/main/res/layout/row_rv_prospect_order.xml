@@ -72,7 +72,7 @@
             android:paddingTop="16dp">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
@@ -84,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2dp"
                     android:gravity="center"
-                    android:text="Target Value "
+                    android:text="Target amt"
                     android:textColor="#00897B" />
 
                 <TextView
@@ -99,7 +99,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
@@ -111,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2dp"
                     android:gravity="center"
-                    android:text="Amount Reached "
+                    android:text="Amt Reached "
                     android:textColor="#00897B" />
 
                 <TextView
@@ -126,7 +126,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
@@ -138,7 +138,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2dp"
                     android:gravity="center"
-                    android:text="Remaining Amount "
+                    android:text="Remaining"
                     android:textColor="#00897B" />
 
                 <TextView
@@ -154,7 +154,7 @@
         </LinearLayout>
 
         <View
-            android:id="@+id/hr1"
+            android:id="@+id/hr2"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:background="@color/dividerColor"/>
@@ -173,7 +173,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="0.8 miles"
-                android:textColor="#00897B"
+                android:textColor="#444"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
