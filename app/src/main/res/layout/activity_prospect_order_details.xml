@@ -189,7 +189,7 @@
 
                         <TextView
                             android:id="@+id/collaborators"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
@@ -200,7 +200,7 @@
 
                         <TextView
                             android:id="@+id/items"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
@@ -271,16 +271,42 @@
                             android:textStyle="bold" />
                     </LinearLayout>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/dividerColor" />
+
                     <Button
                         android:id="@+id/button_chat"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Chat" />
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border_button_accent"
+                        android:textColor="@color/white"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="24dp"
+                        android:text="Chat with group" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/dividerColor" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Items"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp" />
 
 
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
+
         </ScrollView>
 
     </RelativeLayout>

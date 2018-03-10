@@ -24,6 +24,11 @@ public class ProspectOrderDetails extends AppCompatActivity {
 
 
         initVariable();
+        showAllItems();
+    }
+
+    private void showAllItems() {
+
     }
 
     private void initVariable() {
