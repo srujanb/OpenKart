@@ -73,7 +73,7 @@ public class OpenOrderAddItem extends AppCompatActivity {
         }
 
         final CollaborationItem item = new CollaborationItem();
-        item.setItemLink(etItemLink.getText().toString());
+        item.setItemLink(getFirebaseSafeLink(etItemLink.getText().toString()));
         item.setItemName(etItemName.getText().toString());
         item.setRatePerUnit(Float.valueOf(etItemRate.getText().toString()));
         item.setCount(Float.valueOf(etItemCount.getText().toString()));
@@ -110,5 +110,11 @@ public class OpenOrderAddItem extends AppCompatActivity {
 
             }
         });
+    }
+
+    private String getFirebaseSafeLink(String s) {
+        s = s.replace('.',',');
+        s = s.replace('/','\\');
+        return s;
     }
 }

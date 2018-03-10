@@ -2,6 +2,7 @@ package com.example.sbarai.openkart;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -38,7 +39,7 @@ public class ProspectOrderDetails extends AppCompatActivity {
 
 
         initVariable();
-        getOrderDetailsAndShowItems();
+//        getOrderDetailsAndShowItems();
     }
 
     private void getOrderDetailsAndShowItems() {
@@ -56,25 +57,53 @@ public class ProspectOrderDetails extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        listOfItems.removeAllViews();
+        getOrderDetailsAndShowItems();
+    }
+
     private void showAllItems(ProspectOrder order) {
         //dummy data
-        for (String collaboratorHashKey: order.getCollaborators().keySet()){
-            Collaborator collaborator = order.getCollaborators().get(collaboratorHashKey);
-            View collaboratorView = inflater.inflate(R.layout.prospect_order_collaborator_name,null);
-            TextView collaboratorName = collaboratorView.findViewById(R.id.collaborator_name);
-            setCollaboratorName(collaboratorName,collaboratorHashKey);
-            listOfItems.addView(collaboratorView);
-            for (String itemHashKey: collaborator.getCollaborationItems().keySet()){
-                CollaborationItem item = collaborator.getCollaborationItems().get(itemHashKey);
-                View itemView = inflater.inflate(R.layout.prospect_order_item_details,null);
-                TextView itemName = itemView.findViewById(R.id.item_name);
-                itemName.setText(item.getItemName());
-                TextView itemCount = itemView.findViewById(R.id.item_count);
-                itemCount.setText(String.valueOf(item.getCount()));
+        if (order == null)
+            return;
+        if (order.getCollaborators() != null){
+            for (String collaboratorHashKey : order.getCollaborators().keySet()) {
+                Collaborator collaborator = order.getCollaborators().get(collaboratorHashKey);
+                View collaboratorView = inflater.inflate(R.layout.prospect_order_collaborator_name, null);
+                TextView collaboratorName = collaboratorView.findViewById(R.id.collaborator_name);
+                setCollaboratorName(collaboratorName, collaboratorHashKey);
+                listOfItems.addView(collaboratorView);
 
-                listOfItems.addView(itemView);
+                if (collaborator.getCollaborationItems() != null) {
+                    for (String itemHashKey : collaborator.getCollaborationItems().keySet()) {
+                        final CollaborationItem item = collaborator.getCollaborationItems().get(itemHashKey);
+                        View itemView = inflater.inflate(R.layout.prospect_order_item_details, null);
+                        TextView itemName = itemView.findViewById(R.id.item_name);
+                        itemName.setText(item.getItemName());
+                        TextView itemCount = itemView.findViewById(R.id.item_count);
+                        itemCount.setText(String.valueOf(item.getCount()));
+                        itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getFirebaseUnsafeString(item.getItemLink())));
+                                startActivity(browserIntent);
+                            }
+                        });
+
+                        listOfItems.addView(itemView);
+                    }
+                }
             }
         }
+//        listOfItems.addView(inflater.inflate(R.layout.prospect_order_item_details,null));
+    }
+
+    private String getFirebaseUnsafeString(String s) {
+        s = s.replace(",",".");
+        s = s.replace("\\","/");
+        return s;
     }
 
     private void setCollaboratorName(final TextView collaboratorName, String collaboratorHashKey) {
