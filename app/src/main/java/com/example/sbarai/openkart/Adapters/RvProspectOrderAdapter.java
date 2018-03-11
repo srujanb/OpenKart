@@ -99,17 +99,7 @@ public class RvProspectOrderAdapter extends RecyclerView.Adapter<RvProspectOrder
                 ProspectOrder order = dataSnapshot.getValue(ProspectOrder.class);
                 try {
                     holder.storeTitle.setText(order.getDesiredStore());
-                    LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(order.getOrderDate()), ZoneId.systemDefault());
-                    ;
-                    int daysToGo = (int) DAYS.between(LocalDateTime.now(), date);
-                    if (daysToGo < 0)
-                        holder.orderDate.setText("overdue");
-                    else if (daysToGo == 0)
-                        holder.orderDate.setText("Today");
-                    else if (daysToGo == 1)
-                        holder.orderDate.setText("Tomorrow");
-                    else
-                        holder.orderDate.setText("" + daysToGo + " Days left");
+                    setDateToView(order.getOrderDate(),holder.orderDate);
                     setAmounts(holder.targetValue, holder.amountReached, holder.remainingAmount, order);
                     holder.distance.setText(getDistanceFromLocation(order.getLocLat(), order.getLocLon()) + " Miles");
                 } catch (Exception e) {
@@ -131,6 +121,19 @@ public class RvProspectOrderAdapter extends RecyclerView.Adapter<RvProspectOrder
                 }
             }
         });
+    }
+
+    private void setDateToView(long orderDate, TextView orderDateView) {
+        LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(orderDate), ZoneId.systemDefault());
+        int daysToGo = (int) DAYS.between(LocalDateTime.now(), date);
+        if (daysToGo < 0)
+            orderDateView.setText("overdue");
+        else if (daysToGo == 0)
+            orderDateView.setText("Today");
+        else if (daysToGo == 1)
+           orderDateView.setText("Tomorrow");
+        else
+            orderDateView.setText("" + daysToGo + " Days left");
     }
 
     public static String getDistanceFromLocation(double lat1, double lon1) {

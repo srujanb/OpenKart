@@ -198,7 +198,7 @@
                             android:paddingTop="16dp">
 
                             <TextView
-                                android:id="@+id/collaborators"
+                                android:id="@+id/collaborators_num"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -209,7 +209,7 @@
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/items"
+                                android:id="@+id/items_num"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
