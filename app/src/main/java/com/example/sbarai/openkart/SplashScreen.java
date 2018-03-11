@@ -1,7 +1,14 @@
 package com.example.sbarai.openkart;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +30,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Arrays;
 
 public class SplashScreen extends AppCompatActivity {
+
+    static final int DIALOG_ERROR_CONNECTION = 1;
     public DatabaseReference ref;
     private static final int RC_SIGN_IN = 123;
 
@@ -59,7 +68,50 @@ public class SplashScreen extends AppCompatActivity {
                 }
             }
         },500);
+
+        if (!isOnline(this)) {
+            showDialog(DIALOG_ERROR_CONNECTION); //displaying the created dialog.
+        }
     }
+
+    public boolean isOnline(Context c) {
+        ConnectivityManager cm = (ConnectivityManager) c
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+
+        if (ni != null && ni.isConnected())
+            return true;
+        else
+            return false;
+    }
+
+    protected Dialog onCreateDialog(int id){
+        Dialog dialog = null;
+        switch (id) {
+            case DIALOG_ERROR_CONNECTION:
+                AlertDialog.Builder errorDialog = new AlertDialog.Builder(this);
+                errorDialog.setTitle("Error");
+                errorDialog.setMessage("No internet connection.");
+                errorDialog.setNeutralButton("OK",
+                        new DialogInterface.OnClickListener(){
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent intent=new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+                                startActivity(intent);
+                                //dialog.dismiss();
+                            }
+                        });
+
+                AlertDialog errorAlert = errorDialog.create();
+                return errorAlert;
+
+            default:
+                break;
+        }
+        return dialog;
+    }
+
 
     private void userLoggedInGoAhead() {
         Log.d("TAGG","User is not null");

@@ -7,9 +7,9 @@ import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.app.AlertDialog;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -23,6 +23,7 @@ import com.daimajia.androidanimations.library.YoYo;
 
 public class MainActivity extends AppCompatActivity {
 
+
     Toolbar toolbar;
 
     View openOrders;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         toolbar = findViewById(R.id.appbar);
         setSupportActionBar(toolbar);
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         setOnClickListeners();
 
     }
+
 
     private void hideHomeScreenCards() {
         openOrders.setVisibility(View.INVISIBLE);
