@@ -91,13 +91,13 @@ public class SplashScreen extends AppCompatActivity {
             case DIALOG_ERROR_CONNECTION:
                 AlertDialog.Builder errorDialog = new AlertDialog.Builder(this);
                 errorDialog.setTitle("Error");
-                errorDialog.setMessage("No internet connection.");
+                errorDialog.setMessage("No internet connection. Please turn on the internet for app to run as intended.");
                 errorDialog.setNeutralButton("OK",
                         new DialogInterface.OnClickListener(){
 
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
-                                Intent intent=new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+                                Intent intent=new Intent(Settings.ACTION_WIFI_SETTINGS);
                                 startActivity(intent);
                                 //dialog.dismiss();
                             }

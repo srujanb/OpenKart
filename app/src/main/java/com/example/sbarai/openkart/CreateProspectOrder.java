@@ -188,7 +188,8 @@ public class CreateProspectOrder extends AppCompatActivity
             ref.setValue(prospectOrder).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    Toast.makeText(thisActivity, "Task completed : " + task.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(thisActivity, "Submitted", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             });
         }

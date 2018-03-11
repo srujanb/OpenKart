@@ -32,10 +32,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseError;
@@ -60,7 +56,7 @@ public class OpenOrders extends AppCompatActivity implements GoogleApiClient.Con
     private RvProspectOrderAdapter adapter;
     GeoFire geoFire;
     static List<String> data = Collections.emptyList();
-    double fetchRadius = 0;
+    double fetchRadiusInMiles = 0;
     GeoQuery geoQuery;
     IndicatorSeekBar seekBar;
     SmoothProgressBar progressBar;
@@ -237,7 +233,7 @@ public class OpenOrders extends AppCompatActivity implements GoogleApiClient.Con
         data = new ArrayList<>();
 //        totalKeysEntered = 0;
 //        isGeoQueryReady = false;
-        geoQuery = geoFire.queryAtLocation(new GeoLocation(location.getLatitude(), location.getLongitude()), fetchRadius);
+        geoQuery = geoFire.queryAtLocation(new GeoLocation(location.getLatitude(), location.getLongitude()), getKmFromMiles((float) fetchRadiusInMiles));
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
@@ -319,6 +315,7 @@ public class OpenOrders extends AppCompatActivity implements GoogleApiClient.Con
             }
         });
         seekBar.setProgress((float) 1.5);
+        changeRadius((float)1.5);
     }
 
     private void recalculateSeekBarRange(IndicatorSeekBar seekBar) {
@@ -337,12 +334,16 @@ public class OpenOrders extends AppCompatActivity implements GoogleApiClient.Con
 
     private void changeRadius(float progressFloat) {
         progressBar.setVisibility(View.VISIBLE);
-        fetchRadius = progressFloat;
+        fetchRadiusInMiles = progressFloat;
         if (geoQuery != null)
-            geoQuery.setRadius(progressFloat);
+            geoQuery.setRadius(getKmFromMiles(progressFloat));
         TextView radiusValue = findViewById(R.id.radius_value);
         String string = "" + progressFloat + " miles";
         radiusValue.setText(string);
+    }
+
+    private double getKmFromMiles(float progressFloat) {
+        return progressFloat * 1.609344;
     }
 
     @Override
