@@ -65,7 +65,7 @@
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/initiatedBy"
+                                android:id="@+id/initiated_by"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_below="@id/storeName"

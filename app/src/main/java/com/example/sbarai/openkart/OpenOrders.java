@@ -41,7 +41,7 @@ public class OpenOrders extends AppCompatActivity {
     FloatingActionButton testingButton;
     View createProspectOrderCard;
     Toolbar toolbar;
-    private FusedLocationProviderClient mFusedLocationClient;
+    public static FusedLocationProviderClient mFusedLocationClient;
     RecyclerView mRecyclerView;
     private RvProspectOrderAdapter adapter;
     GeoFire geoFire;
@@ -50,6 +50,7 @@ public class OpenOrders extends AppCompatActivity {
     GeoQuery geoQuery;
     IndicatorSeekBar seekBar;
     SmoothProgressBar progressBar;
+    public static Location location;
 
 
     @Override
@@ -101,6 +102,7 @@ public class OpenOrders extends AppCompatActivity {
                     public void onSuccess(Location location) {
                         // Got last known location. In some rare situations this can be null.
                         if (location != null) {
+                            OpenOrders.location = location;
                             fetchData(location);
                         }
                     }
