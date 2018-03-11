@@ -44,14 +44,13 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="#FF7043">
+                        android:layout_height="match_parent">
 
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/blackwhite_cross_checks" />
+                            android:src="@color/colorPrimaryDark" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -63,7 +62,6 @@
                             android:textStyle="bold" />
 
                     </RelativeLayout>
-
 
                 </android.support.v7.widget.CardView>
 
@@ -77,14 +75,13 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="#FF7043">
+                        android:layout_height="match_parent">
 
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/blackwhite_cross_checks" />
+                            android:src="@color/colorPrimaryDark" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -110,14 +107,13 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="#FF7043">
+                        android:layout_height="match_parent">
 
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/blackwhite_cross_checks" />
+                            android:src="@color/colorPrimaryDark" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -147,7 +143,7 @@
         android:maxHeight="?attr/actionBarSize"
         android:layout_alignParentBottom="true"
         android:padding="12dp"
-        android:background="#546E7A">
+        android:background="@color/colorPrimaryDark">
 
         <TextView
             android:layout_width="match_parent"

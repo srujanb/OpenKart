@@ -44,6 +44,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ServerValue;
 
@@ -172,7 +173,13 @@ public class CreateProspectOrder extends AppCompatActivity
         prospectOrder.setTargetTotal(Float.parseFloat(targetTotal.getText().toString()));
         prospectOrder.setOrderDate(orderDate);
         prospectOrder.setStatus(Constants.ProspectOrder.STATUS_ACTIVE);
-        //TODO set user/collaborator
+        try {
+            prospectOrder.setCreatorKey(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        }catch (Exception e){
+            Toast.makeText(thisActivity, "Error: user does not exist", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
         if (isProspectOrderValid(prospectOrder)){
             DatabaseReference ref = FirebaseManager.getRefToProspectOrders();

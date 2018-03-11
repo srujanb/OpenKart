@@ -1,6 +1,11 @@
 package com.example.sbarai.openkart.Models;
 
+import android.widget.Toast;
+
+import com.google.firebase.database.Exclude;
+
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -10,7 +15,8 @@ import java.util.List;
 public class Collaborator {
 
     private String userId;
-    private List<CollaborationItem> collaborationItems;
+
+    private HashMap<String,CollaborationItem> collaborationItems;
 
     public String getUserId() {
         return userId;
@@ -20,18 +26,27 @@ public class Collaborator {
         this.userId = userId;
     }
 
-    public List<CollaborationItem> getCollaborationItems() {
-        if (collaborationItems == null)
-            return Collections.emptyList();
+    public HashMap<String, CollaborationItem> getCollaborationItems() {
         return collaborationItems;
     }
 
-    public void setCollaborationItems(List<CollaborationItem> collaborationItems) {
+    public void setCollaborationItems(HashMap<String, CollaborationItem> collaborationItems) {
         this.collaborationItems = collaborationItems;
     }
 
+    @Exclude
     public int getCollaborationItemsCount(){
         return getCollaborationItems().size();
+    }
+
+    public void addCollaborationItem(CollaborationItem item){
+        if (collaborationItems == null)
+            collaborationItems = new HashMap<>();
+        if (collaborationItems.containsKey(item.getItemLink())){
+            CollaborationItem oldItem = collaborationItems.get(item.getItemLink());
+            item.setCount(item.getCount() + oldItem.getCount());
+        }
+        collaborationItems.put(item.getItemLink(),item);
     }
 
 

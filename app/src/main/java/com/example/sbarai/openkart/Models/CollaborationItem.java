@@ -13,14 +13,14 @@ public class CollaborationItem {
     private String itemLink;
     private float count;
     private float ratePerUnit;
-    private int unitType;
+//    private int unitType;
     private Boolean isDelivered;
 
     public String getItemName() {
         return itemName;
     }
 
-    public void seItemName(String name) {
+    public void setItemName(String name) {
         this.itemName = name;
     }
 
@@ -48,13 +48,13 @@ public class CollaborationItem {
         this.ratePerUnit = ratePerUnit;
     }
 
-    public int getUnitType() {
+    /*public int getUnitType() {
         return unitType;
     }
 
     public void setUnitType(int unitType) {
         this.unitType = unitType;
-    }
+    }*/
 
     public Boolean isDelivered() {
         return isDelivered;
@@ -64,16 +64,16 @@ public class CollaborationItem {
         isDelivered = delivered;
     }
 
-    @Exclude
+    /*@Exclude
     public String getUnitTypeSymbol(int unitType){
         String unitTypeUnitSymbole = getUnitTypeUnitSymbol(unitType);
         if (unitTypeUnitSymbole.equals(""))
             return "";
         else
             return unitTypeUnitSymbole.concat("(s)");
-    }
+    }*/
 
-    @Exclude
+    /*@Exclude
     public String getUnitTypeUnitSymbol(int unitType){
         switch (unitType){
             case Constants.CollaborationItem.UNITTYPE_COUNT:{
@@ -94,6 +94,6 @@ public class CollaborationItem {
             default:
                 return "";
         }
-    }
+    }*/
 
 }

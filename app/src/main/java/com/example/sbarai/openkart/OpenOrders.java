@@ -11,7 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sbarai.openkart.Adapters.RvProspectOrderAdapter;
@@ -26,28 +26,32 @@ import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
+import com.warkiz.widget.IndicatorSeekBar;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
 public class OpenOrders extends AppCompatActivity {
 
-    FloatingActionButton createProspectOrder;
+    FloatingActionButton createProspectOrderMenu;
     FloatingActionButton testingButton;
+    View createProspectOrderCard;
     Toolbar toolbar;
-    private FusedLocationProviderClient mFusedLocationClient;
+    public static FusedLocationProviderClient mFusedLocationClient;
     RecyclerView mRecyclerView;
     private RvProspectOrderAdapter adapter;
-    DatabaseReference prospectOrdersReference;
     GeoFire geoFire;
-    static List<String> data;
-    double fetchRadius = 2;
-//    int totalKeysEntered;
-//    Boolean isGeoQueryReady;
+    static List<String> data = Collections.emptyList();
+    double fetchRadius = 0;
+    GeoQuery geoQuery;
+    IndicatorSeekBar seekBar;
+    SmoothProgressBar progressBar;
+    public static Location location;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +66,22 @@ public class OpenOrders extends AppCompatActivity {
         setFABListeners();
 
         initVariables();
+        setListeners();
+        setRecyclerView();
         executeOneTimeLocationListener();
+        setRadiusSeekBar();
 //        setRecyclerView();
 
 
+    }
+
+    private void setListeners() {
+        createProspectOrderCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openCreateProspectOrderActivity();
+            }
+        });
     }
 
     private void executeOneTimeLocationListener() {
@@ -86,6 +102,7 @@ public class OpenOrders extends AppCompatActivity {
                     public void onSuccess(Location location) {
                         // Got last known location. In some rare situations this can be null.
                         if (location != null) {
+                            OpenOrders.location = location;
                             fetchData(location);
                         }
                     }
@@ -93,9 +110,7 @@ public class OpenOrders extends AppCompatActivity {
     }
 
     private void initVariables() {
-        mRecyclerView = findViewById(R.id.rv_open_orders);
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        geoFire = new GeoFire(FirebaseManager.getRefToGeofireForProspectOrders());
+
     }
 
     @Override
@@ -109,29 +124,35 @@ public class OpenOrders extends AppCompatActivity {
     }
 
     private void defineVariables() {
-        createProspectOrder = findViewById(R.id.menu_item_1);
+        createProspectOrderMenu = findViewById(R.id.menu_item_1);
+        createProspectOrderCard = findViewById(R.id.no_data_found);
         testingButton = findViewById(R.id.menu_item_2);
+        mRecyclerView = findViewById(R.id.rv_open_orders);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        geoFire = new GeoFire(FirebaseManager.getRefToGeofireForProspectOrders());
+        progressBar = findViewById(R.id.progress_bar);
     }
 
     private void setFABListeners() {
-        createProspectOrder.setOnClickListener(new View.OnClickListener() {
+        createProspectOrderMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(OpenOrders.this,CreateProspectOrder.class));
+                openCreateProspectOrderActivity();
             }
         });
 
         testingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                FirebaseDatabase database = FirebaseDatabase.getInstance();
-//                DatabaseReference ref = database.getReference();
-//                ref.setValue("Hello");
             }
         });
     }
 
-    public List<ProspectOrder> getData(){
+    public void openCreateProspectOrderActivity() {
+        startActivity(new Intent(OpenOrders.this, CreateProspectOrder.class));
+    }
+
+    public List<ProspectOrder> getData() {
         List<ProspectOrder> orders = new ArrayList<>();
         ProspectOrder order = new ProspectOrder();
         order.setDesiredStore("Walmart");
@@ -153,22 +174,23 @@ public class OpenOrders extends AppCompatActivity {
         return orders;
     }
 
-    public void fetchData(Location location){
+    public void fetchData(Location location) {
         data = new ArrayList<>();
 //        totalKeysEntered = 0;
 //        isGeoQueryReady = false;
-        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(location.getLatitude(), location.getLongitude()), fetchRadius);
+        geoQuery = geoFire.queryAtLocation(new GeoLocation(location.getLatitude(), location.getLongitude()), fetchRadius);
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
 //                totalKeysEntered++;
-                Log.d("TAGG","onKeyEntered");
+                Log.d("TAGG", "onKeyEntered");
                 insertIntoData(key);
             }
 
             @Override
             public void onKeyExited(String key) {
-
+                Log.d("TAGG", "onKeyExited");
+                removeFromData(key);
             }
 
             @Override
@@ -179,7 +201,9 @@ public class OpenOrders extends AppCompatActivity {
             @Override
             public void onGeoQueryReady() {
 //                isGeoQueryReady = true;
-                setRecyclerView();
+                progressBar.setVisibility(View.GONE);
+                Log.d("TAGG", "Geoquery ready");
+                adapter.dataSetChanged();
             }
 
             @Override
@@ -189,30 +213,75 @@ public class OpenOrders extends AppCompatActivity {
         });
     }
 
+    private void removeFromData(String key) {
+        adapter.removeFromData(key);
+    }
+
     private void insertIntoData(String key) {
-        data.add(key);
-//        if (isGeoQueryReady && data.size() == totalKeysEntered){
-//            setRecyclerView();
+//        data.add(key);
+        adapter.insertIntoData(key);
+    }
+
+    public void setRecyclerView() {
+//        if (data == null){
+//            Toast.makeText(this, "Data is null", Toast.LENGTH_SHORT).show();
+//        }else if (data.size() == 0){
+//            Log.d("TAGG","setRecyclerView - data size: " + data.size());
+//        } else {
+        adapter = new RvProspectOrderAdapter(this, data);
+        adapter.setNoDataFound(findViewById(R.id.no_data_found));
+        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 //        }
-//        Log.d("TAGG","insertIntoData - data size: " + data.size());
     }
 
-    public void setRecyclerView(){
-        if (data == null){
-            Toast.makeText(this, "Data is null", Toast.LENGTH_SHORT).show();
-        }else if (data.size() == 0){
-            Log.d("TAGG","setRecyclerView - data size: " + data.size());
-        } else {
-            adapter = new RvProspectOrderAdapter(this, data);
-            mRecyclerView.setAdapter(adapter);
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    private void setRadiusSeekBar() {
+        seekBar = findViewById(R.id.radius_seekbar);
+        seekBar.setOnSeekChangeListener(new IndicatorSeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(IndicatorSeekBar seekBar, int progress, float progressFloat, boolean fromUserTouch) {
+                changeRadius(progressFloat);
+            }
+
+            @Override
+            public void onSectionChanged(IndicatorSeekBar seekBar, int thumbPosOnTick, String textBelowTick, boolean fromUserTouch) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(IndicatorSeekBar seekBar, int thumbPosOnTick) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
+                recalculateSeekBarRange(seekBar);
+            }
+        });
+        seekBar.setProgress((float) 1.5);
+    }
+
+    private void recalculateSeekBarRange(IndicatorSeekBar seekBar) {
+        float currentValue = seekBar.getProgressFloat();
+        float maxValue = seekBar.getMax();
+        if (currentValue < 0.05 * maxValue) return;
+        if (currentValue < 0.2 * maxValue) {
+            seekBar.setMax((float) (maxValue*(3.0/5.0)));
         }
+        if (currentValue > 0.8 * maxValue) {
+            seekBar.setMax((float) (maxValue*(7.0/5.0)));
+
+        }
+        seekBar.setProgress(currentValue);
     }
 
-    public void GO(View view) {
-        EditText et = findViewById(R.id.radius);
-        String string = et.getText().toString();
-        fetchRadius = Double.parseDouble(string);
-        executeOneTimeLocationListener();
+    private void changeRadius(float progressFloat) {
+        progressBar.setVisibility(View.VISIBLE);
+        fetchRadius = progressFloat;
+        if (geoQuery != null)
+            geoQuery.setRadius(progressFloat);
+        TextView radiusValue = findViewById(R.id.radius_value);
+        String string = "" + progressFloat + " miles";
+        radiusValue.setText(string);
     }
 }

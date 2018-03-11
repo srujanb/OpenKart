@@ -4,6 +4,8 @@ import android.location.Location;
 
 import com.google.firebase.database.Exclude;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -15,16 +17,25 @@ import java.util.List;
 
 public class ProspectOrder {
 
+    public String creatorKey;
     public Object dateTime; //Will be stored as milliseconds on server therefore long.
     private double locLat;
     private double locLon;
     private float colabRadius;
     private String desiredStore;
     private long orderDate; //Can be easily converted to String from java.time
-    private float targetTotal;
-    private List<Collaborator> collaborators;
-    private List<Comment> comments;
+    private HashMap<String,Collaborator> collaborators;
+//    private List<Comment> comments;
     private int status;
+    private float targetTotal;
+
+    public String getCreatorKey() {
+        return creatorKey;
+    }
+
+    public void setCreatorKey(String userKey) {
+        this.creatorKey = userKey;
+    }
 
     @Exclude
     public void setLocation(Location location){
@@ -82,6 +93,19 @@ public class ProspectOrder {
 
     public float getTargetTotal() {
         return targetTotal;
+    }
+
+    public HashMap<String, Collaborator> getCollaborators() {
+        return collaborators;
+    }
+    public void setCollaborators(HashMap<String, Collaborator> collaborators) {
+        this.collaborators = collaborators;
+    }
+
+    public void addCollaborator(Collaborator collaborator){
+        if (collaborators == null)
+            collaborators = new HashMap<>();
+        collaborators.put(collaborator.getUserId(),collaborator);
     }
 
     public void setTargetTotal(float targetTotal) {
