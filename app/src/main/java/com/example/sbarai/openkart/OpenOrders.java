@@ -3,7 +3,10 @@ package com.example.sbarai.openkart;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,8 +26,17 @@ import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
 import com.github.clans.fab.FloatingActionButton;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseError;
 import com.warkiz.widget.IndicatorSeekBar;
@@ -35,13 +47,15 @@ import java.util.List;
 
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
-public class OpenOrders extends AppCompatActivity {
+public class OpenOrders extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
     FloatingActionButton createProspectOrderMenu;
     FloatingActionButton testingButton;
     View createProspectOrderCard;
     Toolbar toolbar;
     public static FusedLocationProviderClient mFusedLocationClient;
+    private LocationRequest mLocationRequest;
+    public GoogleApiClient mGoogleApiClient;
     RecyclerView mRecyclerView;
     private RvProspectOrderAdapter adapter;
     GeoFire geoFire;
@@ -51,6 +65,7 @@ public class OpenOrders extends AppCompatActivity {
     IndicatorSeekBar seekBar;
     SmoothProgressBar progressBar;
     public static Location location;
+    private boolean hasDataLoaded = false;
 
 
     @Override
@@ -62,18 +77,49 @@ public class OpenOrders extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
         toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        connectGoogleApiClients();
         defineVariables();
         setFABListeners();
 
         initVariables();
         setListeners();
         setRecyclerView();
-        executeOneTimeLocationListener();
+//        executeOneTimeLocationListener();
         setRadiusSeekBar();
 //        setRecyclerView();
 
 
     }
+
+    private void connectGoogleApiClients() {
+        if (checkIfGooglePlayServicesAreAvailable()) {
+            //Get Access to the google service api
+            buildGoogleApiClient();
+            mGoogleApiClient.connect();
+        } else {
+            //Use Android Location Services
+            //TODO:
+        }
+    }
+
+    private boolean checkIfGooglePlayServicesAreAvailable() {
+        int errorCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (errorCode != ConnectionResult.SUCCESS) {
+            GooglePlayServicesUtil.getErrorDialog(errorCode,  this, 0).show();
+            return false;
+        }
+        return true;
+    }
+
+    private synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+
 
     private void setListeners() {
         createProspectOrderCard.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +131,7 @@ public class OpenOrders extends AppCompatActivity {
     }
 
     private void executeOneTimeLocationListener() {
+        Log.d("TAGG","ExecuteOneTimeLocationListener");
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -94,20 +141,31 @@ public class OpenOrders extends AppCompatActivity {
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
             Toast.makeText(this, "Does not have Location permission", Toast.LENGTH_SHORT).show();
+            Log.d("TAGG","Does not have permission");
             return;
         }
+
         mFusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                     @Override
                     public void onSuccess(Location location) {
                         // Got last known location. In some rare situations this can be null.
                         if (location != null) {
+                            Log.d("TAGG","Executed getLastLocation");
                             OpenOrders.location = location;
                             fetchData(location);
                         }
                     }
-                });
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("TAGG","Location listener failed");
+                executeOneTimeLocationListener();
+            }
+        });
     }
+
+
 
     private void initVariables() {
 
@@ -175,6 +233,7 @@ public class OpenOrders extends AppCompatActivity {
     }
 
     public void fetchData(Location location) {
+        Log.d("TAGG","fetchData called");
         data = new ArrayList<>();
 //        totalKeysEntered = 0;
 //        isGeoQueryReady = false;
@@ -223,6 +282,7 @@ public class OpenOrders extends AppCompatActivity {
     }
 
     public void setRecyclerView() {
+        Log.d("TAGG","setRecyclerView");
 //        if (data == null){
 //            Toast.makeText(this, "Data is null", Toast.LENGTH_SHORT).show();
 //        }else if (data.size() == 0){
@@ -283,5 +343,39 @@ public class OpenOrders extends AppCompatActivity {
         TextView radiusValue = findViewById(R.id.radius_value);
         String string = "" + progressFloat + " miles";
         radiusValue.setText(string);
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Log.d("TAGG","onConnected");
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(1000);
+        mLocationRequest.setFastestInterval(1000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        com.google.android.gms.location.LocationListener locationListener;
+        locationListener = new com.google.android.gms.location.LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                if (!hasDataLoaded){
+                    hasDataLoaded = true;
+                    executeOneTimeLocationListener();
+                }
+            }
+        };
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest,locationListener);
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.d("TAGG","onConnectionSuspended");
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d("TAGG","onConnectionFailed");
     }
 }

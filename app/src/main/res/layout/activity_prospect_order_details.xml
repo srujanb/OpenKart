@@ -269,7 +269,7 @@
                                 android:layout_marginLeft="2dp"
                                 android:gravity="center"
                                 android:text="Shipping to"
-                                android:textColor="#00897B" />
+                                android:textColor="#666" />
 
                             <TextView
                                 android:id="@+id/shipping_address"
@@ -277,7 +277,7 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:text="1705 Crest Rd, Raleigh"
-                                android:textColor="#00897B"
+                                android:textColor="#666"
                                 android:textSize="24sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
