@@ -11,4 +11,4 @@ Evaluation Form - http://tiny.cc/Openkart-evaluation
 
 March Report - http://tiny.cc/b-se18march
 
-March Talk - http://tiny.cc/b-OpenKartPPT
+March Talk - http://tiny.cc/b-marchTalk
