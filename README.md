@@ -18,9 +18,13 @@ You will need Android Studio, Firebase and a ‘Signature’ file to begin the d
 **Step 1**: Download Android Studio from this link- https://developer.android.com/studio/index.html
 We have used AS “3.1 for mac”.
 
+![101](https://user-images.githubusercontent.com/15925203/38444705-6477ff6a-39be-11e8-94d5-f510485e7c61.png)
+
 **Step 2**: Install Android Studio with default configurations.
 
 **Step 3**: Once you successfully install Android Studio you will see the below screen. Select “checkout project from version control” and select Github.
+
+![201](https://user-images.githubusercontent.com/15925203/38444737-824cdc54-39be-11e8-9b88-5e7d8fbc2999.png)
 
 **Step 4**: Once you select to checkout from Github, you’ll be asked to enter use the below link and proceed. (You can even fork and use your own version of project). https://github.com/srujanb/OpenKart.git
 
