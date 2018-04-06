@@ -10,23 +10,23 @@ An Android app as a part of Software Engineering Project
 
 Our application first checks if the user is logged in or not, then accordingly opens the app if logged in or given a login/signup screen which asks for phone number which will be used to send OTP. Here to make it simple for the user, we have kept login and signup same and user won’t have to worry about that part. Following figure shows the flow of login/signup screens:
 
-![1](https://user-images.githubusercontent.com/25709086/38436956-0e7efe84-39a4-11e8-9cb4-89650a926218.jpeg)
+![1](https://user-images.githubusercontent.com/15925203/38443173-c16cd34a-39b8-11e8-8276-8d8bb8af6e68.jpeg)
 
-![2](https://user-images.githubusercontent.com/25709086/38436957-0e93b55e-39a4-11e8-8662-c86831ad67a0.jpeg)
+![2](https://user-images.githubusercontent.com/15925203/38443241-0e762146-39b9-11e8-9011-5ce0f0889454.jpeg)
 
-![3](https://user-images.githubusercontent.com/25709086/38436959-0ea7ec86-39a4-11e8-8c85-0d4010d43f4b.jpeg)
+![3](https://user-images.githubusercontent.com/15925203/38443283-34b41fe8-39b9-11e8-9e4f-7df757e675c4.jpeg)
 
 ### 2.	Main page to navigate between different functionalities:
 
 After the user enters the phone number the OPT is directly detected and the user is directed to main page of the application in which he/she will be asked which functionality the user would like to use. It can be seen in the following diagram:
 
-![4](https://user-images.githubusercontent.com/25709086/38436960-0eb9f28c-39a4-11e8-985c-c1f073e6d159.jpeg)
+![4](https://user-images.githubusercontent.com/15925203/38443365-6d012a30-39b9-11e8-92cb-18a8f80f4bfa.jpeg)
 
 ### 3.	Search Prospect Orders:
 
 Now as we have just implemented the “Open Orders” functionality the user should right now only touch on that part of screen. This will open the “Open Orders” functionality in which user will be able to systematically collaborate with other users who have created prospect orders. Here the page itself acts as search page in which the search results are provided according to the radius that the user sets dynamically. By default radius is set to 1 mile and the following figure shows the screen for the same:
 
-![5](https://user-images.githubusercontent.com/25709086/38436961-0ecf4010-39a4-11e8-8fca-e1535422caca.jpeg)
+![5](https://user-images.githubusercontent.com/15925203/38443408-8aa98d8e-39b9-11e8-8527-c786e19ec5eb.jpeg)
 
 Here the user can set their own radius and accordingly orders are shown which is depicted in the following screenshot:
 
